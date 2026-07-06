@@ -1,0 +1,59 @@
+# ========================================
+# DOCKER COMPOSE - PRODUCTION
+# ========================================
+
+services:
+    server:
+        build:
+            context: .
+            dockerfile: Dockerfile.server
+        container_name: ffme-server
+        restart: unless-stopped
+        network_mode: host
+        environment:
+            NODE_ENV: production
+            PORT: 3000
+            DOCKER: 'true'
+            # Base de données
+            MONGO_URI: ${MONGO_URI}
+            # Authentification
+            JWT_SECRET: ${JWT_SECRET}
+            # Stockage images local
+            UPLOADS_DIR: /app/uploads
+            SERVER_URL: ${SERVER_URL:-https://api.fondationfrancoismeye.ga/}
+            CLIENT_URL: ${CLIENT_URL:-https://fondationfrancoismeye.ga/}
+            # Email
+            SMTP_HOST: ${SMTP_HOST}
+            SMTP_PORT: ${SMTP_PORT}
+            SMTP_USER: ${SMTP_USER}
+            SMTP_PASS: ${SMTP_PASS}
+            # Singpay (paiements)
+            SINGPAY_CLIENT_ID: ${SINGPAY_CLIENT_ID}
+            SINGPAY_CLIENT_SECRET: ${SINGPAY_CLIENT_SECRET}
+            SINGPAY_WALLET_ID: ${SINGPAY_WALLET_ID}
+            SINGPAY_DISBURSEMENT_ID: ${SINGPAY_DISBURSEMENT_ID}
+        volumes:
+            - server_uploads:/app/uploads
+            - server_assets:/app/assets
+    client:
+        build:
+            context: .
+            dockerfile: Dockerfile.client
+        container_name: ffme-client
+        restart: unless-stopped
+        depends_on:
+            - server
+        ports:
+            - '127.0.0.1:4200:80'
+        networks:
+            - ffme-network
+
+networks:
+    ffme-network:
+        driver: bridge
+
+volumes:
+    server_uploads:
+        driver: local
+    server_assets:
+        driver: local

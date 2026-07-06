@@ -1,0 +1,200 @@
+<app-admin-sidebar></app-admin-sidebar>
+
+<div class="admin-content">
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="admin-header__left">
+            <h1 class="admin-header__title">Tableau de bord</h1>
+            <p class="admin-header__subtitle">Vue d'ensemble de votre activité</p>
+        </div>
+        <div class="admin-header__right">
+            <button class="admin-btn admin-btn--outline" (click)="loadStats()">
+                <i class="fas fa-sync-alt" [class.fa-spin]="isLoading"></i>
+                Actualiser
+            </button>
+            <button class="admin-btn admin-btn--danger-outline" (click)="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Déconnexion
+            </button>
+        </div>
+    </header>
+
+    <!-- Stats Cards -->
+    <section class="dashboard-stats">
+        <div class="stats-grid">
+            <app-stat-card
+                title="Dons"
+                [value]="stats?.donationsCount || 0"
+                [subtitle]="stats?.pendingDonationsCount ? stats?.pendingDonationsCount + ' en attente' : undefined"
+                icon="fas fa-hand-holding-heart"
+                variant="primary"
+                [loading]="isLoading"
+            ></app-stat-card>
+
+            <app-stat-card
+                title="Montant Total"
+                [value]="(stats?.totalDonationAmount || 0 | number) + ' FCFA'"
+                icon="fas fa-coins"
+                variant="success"
+                [loading]="isLoading"
+            ></app-stat-card>
+
+            <app-stat-card
+                title="Membres"
+                [value]="stats?.membersCount || 0"
+                [subtitle]="stats?.validatedMembersCount ? stats?.validatedMembersCount + ' certifiés' : undefined"
+                icon="fas fa-users"
+                variant="info"
+                [loading]="isLoading"
+            ></app-stat-card>
+
+            <app-stat-card
+                title="Commandes"
+                [value]="stats?.ordersCount || 0"
+                [subtitle]="stats?.completedOrdersCount ? stats?.completedOrdersCount + ' payées • ' + (stats?.totalOrdersAmount | number) + ' FCFA' : (stats?.pendingOrdersCount ? stats?.pendingOrdersCount + ' en attente' : undefined)"
+                icon="fas fa-shopping-cart"
+                variant="warning"
+                [loading]="isLoading"
+            ></app-stat-card>
+        </div>
+    </section>
+
+    <!-- Chart Section -->
+    <section class="dashboard-chart">
+        <div class="chart-card">
+            <div class="chart-card__header">
+                <h3 class="chart-card__title">Évolution des activités</h3>
+                <span class="chart-card__subtitle">6 derniers mois</span>
+            </div>
+            <div class="chart-card__body">
+                <canvas #chartCanvas></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Secondary Stats -->
+    <section class="dashboard-secondary">
+        <div class="secondary-grid">
+            <div class="secondary-card">
+                <div class="secondary-card__icon secondary-card__icon--products">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="secondary-card__content">
+                    <span class="secondary-card__value">{{ stats?.productsCount || 0 }}</span>
+                    <span class="secondary-card__label">Produits</span>
+                </div>
+            </div>
+
+            <div class="secondary-card">
+                <div class="secondary-card__icon secondary-card__icon--news">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <div class="secondary-card__content">
+                    <span class="secondary-card__value">{{ stats?.newsCount || 0 }}</span>
+                    <span class="secondary-card__label">Actualités</span>
+                </div>
+            </div>
+
+            <div class="secondary-card">
+                <div class="secondary-card__icon secondary-card__icon--gallery">
+                    <i class="fas fa-images"></i>
+                </div>
+                <div class="secondary-card__content">
+                    <span class="secondary-card__value">{{ stats?.photosCount || 0 }}</span>
+                    <span class="secondary-card__label">Photos</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Activity Tables -->
+    <section class="dashboard-tables">
+        <div class="tables-grid">
+            <!-- Recent Donations -->
+            <div class="activity-card">
+                <div class="activity-card__header">
+                    <h3 class="activity-card__title">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        Derniers dons
+                    </h3>
+                    <a class="activity-card__link" routerLink="/admin/dons">Voir tout</a>
+                </div>
+                <div class="activity-card__body">
+                    <div class="activity-list" *ngIf="stats?.recentDonations?.length; else noDonations">
+                        <div
+                            class="activity-item"
+                            *ngFor="let don of stats?.recentDonations"
+                            (click)="goToDonation(don.idDonation)"
+                        >
+                            <div class="activity-item__avatar">
+                                {{ don.firstName?.charAt(0) }}{{ don.lastName?.charAt(0) }}
+                            </div>
+                            <div class="activity-item__info">
+                                <span class="activity-item__name">{{ don.firstName }} {{ don.lastName }}</span>
+                                <span class="activity-item__date">{{ don.registrationDate | date:'dd/MM/yyyy' }}</span>
+                            </div>
+                            <div class="activity-item__right">
+                                <span class="activity-item__amount">{{ don.amount | number }} F</span>
+                                <span
+                                    class="activity-item__status"
+                                    [ngClass]="getStatusClass(don.isPaid)"
+                                >
+                                    {{ getStatusLabel(don.isPaid) }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #noDonations>
+                        <div class="activity-empty">
+                            <i class="fas fa-inbox"></i>
+                            <span>Aucun don récent</span>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="activity-card">
+                <div class="activity-card__header">
+                    <h3 class="activity-card__title">
+                        <i class="fas fa-shopping-bag"></i>
+                        Dernières commandes
+                    </h3>
+                    <a class="activity-card__link" routerLink="/admin/produits">Voir tout</a>
+                </div>
+                <div class="activity-card__body">
+                    <div class="activity-list" *ngIf="stats?.recentOrders?.length; else noOrders">
+                        <div
+                            class="activity-item"
+                            *ngFor="let order of stats?.recentOrders"
+                            (click)="goToOrder(order._id)"
+                        >
+                            <div class="activity-item__avatar activity-item__avatar--order">
+                                {{ order.firstName?.charAt(0) }}{{ order.lastName?.charAt(0) }}
+                            </div>
+                            <div class="activity-item__info">
+                                <span class="activity-item__name">{{ order.firstName }} {{ order.lastName }}</span>
+                                <span class="activity-item__date">{{ order.date | date:'dd/MM/yyyy HH:mm' }}</span>
+                            </div>
+                            <div class="activity-item__right">
+                                <span class="activity-item__amount" *ngIf="order.totalAmount">{{ order.totalAmount | number }} F</span>
+                                <span
+                                    class="activity-item__status"
+                                    [ngClass]="getStatusClass(order.isPaid)"
+                                >
+                                    {{ getStatusLabel(order.isPaid) }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #noOrders>
+                        <div class="activity-empty">
+                            <i class="fas fa-inbox"></i>
+                            <span>Aucune commande récente</span>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

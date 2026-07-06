@@ -1,0 +1,371 @@
+/* ===== PAGE FONDATION PROFESSIONNELLE ===== */
+
+/* Container général */
+.container {
+    max-width: var(--max-width-lg);
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+}
+
+/* ===== SECTION PRÉSENTATION ===== */
+.presentation {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    font-family: var(--font-primary);
+    max-width: var(--max-width-lg);
+    margin: 0 auto;
+
+    h2 {
+        color: var(--bleu);
+        font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+        font-weight: 600;
+        margin-bottom: var(--space-lg);
+        letter-spacing: -0.02em;
+        position: relative;
+
+        &::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--jaune) 0%, var(--or) 100%);
+            margin: var(--space-md) auto 0;
+            border-radius: 2px;
+        }
+    }
+
+    p {
+        color: var(--gris-texte);
+        font-size: var(--text-lg);
+        line-height: 1.8;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+}
+
+/* ===== SECTION VALEURS ===== */
+.valeurs {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    font-family: var(--font-primary);
+    max-width: var(--max-width-lg);
+    margin: 0 auto;
+
+    h2 {
+        color: var(--marron);
+        font-size: clamp(var(--text-2xl), 3vw, var(--text-3xl));
+        font-weight: 600;
+    }
+}
+
+.ligne-titre {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    margin: var(--space-sm);
+
+    h2 {
+        color: var(--marron);
+        font-size: clamp(var(--text-xl), 3vw, var(--text-3xl));
+        font-weight: 600;
+        font-family: var(--font-primary);
+        white-space: nowrap;
+    }
+
+    hr {
+        flex-grow: 1;
+        height: 2px;
+        border: none;
+        background: linear-gradient(90deg, var(--marron) 0%, transparent 100%);
+    }
+}
+
+.valeurs-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
+
+    span {
+        font-size: clamp(var(--text-lg), 2.5vw, var(--text-2xl));
+        font-weight: 600;
+        color: var(--marron);
+        padding: var(--space-sm) var(--space-lg);
+        background: rgba(149, 71, 23, 0.1);
+        border-radius: var(--radius-md);
+        transition: all var(--transition-normal);
+
+        &:hover {
+            background: rgba(149, 71, 23, 0.2);
+            transform: translateY(-2px);
+        }
+    }
+}
+
+/* ===== OBJECTIF PRINCIPAL ===== */
+.objectif-principal {
+    background: linear-gradient(135deg, var(--bleu) 0%, var(--bleu-fonce) 100%);
+    color: var(--blanc);
+    text-align: center;
+    padding: var(--space-2xl) var(--space-md);
+    font-family: var(--font-primary);
+    position: relative;
+
+    p {
+        font-size: clamp(var(--text-xl), 4vw, var(--text-4xl));
+        font-weight: 600;
+        line-height: 1.4;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    /* Motif décoratif */
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(
+            circle at 80% 20%,
+            rgba(247, 230, 73, 0.1) 0%,
+            transparent 40%
+        );
+        pointer-events: none;
+    }
+}
+
+/* ===== SECTION BLOCS ===== */
+.section-blocs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xl);
+    padding: var(--space-2xl) var(--space-md);
+    font-family: var(--font-primary);
+    max-width: var(--max-width-xl);
+    margin: 0 auto;
+}
+
+.colonne {
+    flex: 1 1 380px;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+
+    h4 {
+        color: var(--bleu);
+        font-size: var(--text-lg);
+        text-align: center;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: var(--space-sm);
+    }
+}
+
+.bloc {
+    color: var(--blanc);
+    padding: var(--space-lg);
+    text-align: center;
+    border-radius: var(--radius-lg);
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    min-height: 140px;
+    justify-content: center;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-md);
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    i {
+        font-size: var(--text-3xl);
+        margin-bottom: var(--space-xs);
+    }
+
+    p {
+        font-size: var(--text-base);
+        line-height: 1.5;
+    }
+}
+
+/* Couleurs des blocs */
+.bleu {
+    background: linear-gradient(135deg, var(--bleu) 0%, var(--bleu-fonce) 100%);
+}
+
+.bleu-clair {
+    background: linear-gradient(135deg, var(--bleu-clair) 0%, var(--bleu-gris-profond) 100%);
+}
+
+.jaune {
+    background: linear-gradient(135deg, var(--jaune) 0%, var(--or) 100%);
+    color: var(--bleu-fonce);
+}
+
+.marron {
+    background: linear-gradient(135deg, var(--marron) 0%, #6B2E00 100%);
+}
+
+.gris {
+    background: linear-gradient(135deg, var(--gris) 0%, #666 100%);
+}
+
+/* Grille 2x2 */
+.grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+}
+
+/* ===== BIOGRAPHIE ===== */
+.biography {
+    margin: var(--space-2xl) 0;
+}
+
+/* ===== SECTION BUREAU EXÉCUTIF ===== */
+.section-bureau {
+    padding: var(--space-2xl) var(--space-md);
+    text-align: center;
+    font-family: var(--font-primary);
+    background-color: var(--gris-clair);
+
+    h2 {
+        margin-bottom: var(--space-2xl);
+        color: var(--bleu);
+        font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        position: relative;
+
+        &::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--jaune) 0%, var(--or) 100%);
+            margin: var(--space-md) auto 0;
+            border-radius: 2px;
+        }
+    }
+}
+
+.membres {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-xl);
+    max-width: var(--max-width-xl);
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+}
+
+.membre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all var(--transition-normal);
+
+    &:hover {
+        transform: translateY(-8px);
+
+        .photo {
+            box-shadow: var(--shadow-xl);
+        }
+    }
+}
+
+.photo {
+    width: 180px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    box-shadow: var(--shadow-lg);
+    border: 4px solid var(--blanc);
+    transition: all var(--transition-normal);
+}
+
+.nom {
+    margin: var(--space-md) 0 var(--space-xs);
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--bleu-fonce);
+}
+
+.poste {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--bleu);
+    line-height: 1.4;
+}
+
+/* Ajustements des photos */
+.ajuster-hans,
+.ajuster-ulrich,
+.ajuster-carolina {
+    object-position: center top;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .container {
+        padding: var(--space-lg) var(--space-sm);
+    }
+
+    .presentation h2,
+    .section-bureau h2 {
+        font-size: var(--text-2xl);
+    }
+
+    .objectif-principal p {
+        font-size: var(--text-xl);
+    }
+
+    .section-blocs {
+        padding: var(--space-xl) var(--space-sm);
+        gap: var(--space-lg);
+    }
+
+    .colonne {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    .grid-2x2 {
+        grid-template-columns: 1fr;
+    }
+
+    .membres {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-lg);
+    }
+
+    .photo {
+        width: 140px;
+        height: 160px;
+    }
+
+    .valeurs-list span {
+        font-size: var(--text-base);
+        padding: var(--space-xs) var(--space-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .membres {
+        grid-template-columns: 1fr;
+    }
+
+    .photo {
+        width: 160px;
+        height: 180px;
+    }
+}

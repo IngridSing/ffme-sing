@@ -1,0 +1,40 @@
+<app-admin-sidebar></app-admin-sidebar>
+
+<div class="admin-content">
+    <!-- Header -->
+    <header class="admin-page-header">
+        <div class="admin-page-header__left">
+            <h1 class="admin-page-header__title">Gestion des membres</h1>
+            <p class="admin-page-header__subtitle">Consultez et gérez tous les membres inscrits</p>
+        </div>
+        <div class="admin-page-header__right">
+            <button
+                class="admin-btn admin-btn--danger"
+                (click)="deleteSelectedMembers()"
+                *ngIf="selectedMembers.length > 0"
+            >
+                <i class="fas fa-trash"></i>
+                Supprimer ({{ selectedMembers.length }})
+            </button>
+            <button class="admin-btn admin-btn--outline" (click)="loadMembers()">
+                <i class="fas fa-sync-alt" [class.fa-spin]="isLoading"></i>
+                Actualiser
+            </button>
+        </div>
+    </header>
+
+    <!-- Data Table -->
+    <app-data-table
+        [data]="members"
+        [columns]="columns"
+        title="Liste des membres"
+        [loading]="isLoading"
+        [selectable]="true"
+        [exportable]="true"
+        [searchable]="true"
+        emptyMessage="Aucun membre enregistré"
+        emptyIcon="fas fa-users"
+        (rowClick)="onRowClick($event)"
+        (selectionChange)="onSelectionChange($event)"
+    ></app-data-table>
+</div>

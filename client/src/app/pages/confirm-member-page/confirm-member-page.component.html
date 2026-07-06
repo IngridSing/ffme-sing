@@ -1,0 +1,100 @@
+<app-navbar></app-navbar>
+<app-loading-spinner [show]="isLoading" />
+
+@if(messageErreur.includes('Erreur') || messageErreur.includes('introuvable')) {
+<section class="result-page error">
+    <div class="result-content">
+        <div class="icon">✖</div>
+        <h1>Échec de l’adhésion</h1>
+        <p>{{ messageErreur }}</p>
+        <a class="btn" routerLink="/">Retour à l'accueil</a>
+    </div>
+</section>
+} @else if (messageErreur) {
+<section class="result-page success">
+    <div class="result-content">
+        <div class="icon">✔</div>
+        <h1>Adhésion complétée</h1>
+        <p>{{ messageErreur }}</p>
+        <a class="btn" routerLink="/">Retour à l'accueil</a>
+    </div>
+</section>
+} @else {
+
+<app-title titre="FINALISER VOTRE ADHÉSION"></app-title>
+
+<section class="confirmation-container">
+    <p class="montant">Frais d'adhésion : <strong>15 000 FCFA</strong></p>
+
+    <label class="checkbox-option">
+        <input type="checkbox" [(ngModel)]="includeFirstMonth" (change)="updateMontant()" />
+        Ajouter le paiement du premier mois (5 000 FCFA)
+    </label>
+
+    <p class="montant-total">
+        Montant total à payer : <strong>{{ montantTotal | number }} FCFA</strong>
+    </p>
+
+    <hr />
+    <h3>Choisissez votre moyen de paiement :</h3>
+
+    <!-- SING Pay -->
+    <div class="option-container">
+        <label class="option-label">
+            <input type="radio" name="payment" [(ngModel)]="selectedOption" value="singpay" />
+            <div class="option-content">
+                <strong>SING Pay – Solution numérique sécurisée</strong>
+                <p>Payez votre adhésion via SING Pay, le portefeuille électronique sécurisé de la SING. Paiement instantané, disponible 24h/24.</p>
+                <button
+                    class="singpay-btn"
+                    (click)="submitPayment(PaymentMethod.SING_PAY)"
+                    [disabled]="selectedOption !== 'singpay'">
+                    PAYER AVEC SING PAY
+                </button>
+            </div>
+        </label>
+    </div>
+
+    <!-- Autres moyens -->
+    <div class="option-container">
+        <label class="option-label">
+            <input type="radio" name="payment" [(ngModel)]="selectedOption" value="autre" />
+            <div class="option-content">
+                <span class="autre-option">Autre moyen de paiement</span>
+
+                <!-- Sous-options -->
+                <div *ngIf="selectedOption === 'autre'" class="sous-options">
+                    <div class="sub-option">
+                        <label>
+                            <input type="radio" name="autrePayment" [(ngModel)]="selectedAutre" value="rib" />
+                            <div>
+                                <strong>Paiement par RIB</strong>
+                                <p>Vous recevrez par mail un RIB à utiliser pour un virement bancaire manuel.</p>
+                            </div>
+                        </label>
+                        <button class="sub-btn" (click)="submitPayment(PaymentMethod.RIB)" [disabled]="selectedAutre !== 'rib'">
+                            PAYER AVEC LE RIB
+                        </button>
+                    </div>
+
+                    <div class="sub-option">
+                        <label>
+                            <input type="radio" name="autrePayment" [(ngModel)]="selectedAutre" value="contact" />
+                            <div>
+                                <strong>Paiement sur place</strong>
+                                <p>Vous recevrez par mail les informations pour finaliser l’adhésion.</p>
+                            </div>
+                        </label>
+                        <button class="sub-btn" (click)="submitPayment(PaymentMethod.PICK_UP)" [disabled]="selectedAutre !== 'contact'">
+                            PAYER SUR PLACE
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </label>
+    </div>
+</section>
+
+}
+
+<app-footer></app-footer>

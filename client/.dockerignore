@@ -1,0 +1,43 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Test files
+coverage
+*.spec.ts
+karma.conf.js
+
+# Documentation
+*.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# E2E tests
+e2e
+
+# Angular cache
+.angular

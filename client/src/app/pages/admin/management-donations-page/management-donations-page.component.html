@@ -1,0 +1,32 @@
+<app-admin-sidebar></app-admin-sidebar>
+
+<div class="admin-content">
+    <!-- Header -->
+    <header class="admin-page-header">
+        <div class="admin-page-header__left">
+            <h1 class="admin-page-header__title">Gestion des dons</h1>
+            <p class="admin-page-header__subtitle">Consultez et gérez tous les dons reçus</p>
+        </div>
+        <div class="admin-page-header__right">
+            <button class="admin-btn admin-btn--outline" (click)="loadDonations()">
+                <i class="fas fa-sync-alt" [class.fa-spin]="isLoading"></i>
+                Actualiser
+            </button>
+        </div>
+    </header>
+
+    <!-- Data Table -->
+    <app-data-table
+        [data]="donations"
+        [columns]="columns"
+        title="Liste des dons"
+        [loading]="isLoading"
+        [selectable]="true"
+        [exportable]="true"
+        [searchable]="true"
+        emptyMessage="Aucun don enregistré"
+        emptyIcon="fas fa-hand-holding-heart"
+        (rowClick)="onRowClick($event)"
+        (selectionChange)="onSelectionChange($event)"
+    ></app-data-table>
+</div>

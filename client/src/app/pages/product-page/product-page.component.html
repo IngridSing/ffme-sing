@@ -1,0 +1,151 @@
+<app-navbar></app-navbar>
+<app-loading-spinner [show]="isLoading" />
+<app-cart></app-cart>
+
+<div class="bigger-product-container" *ngIf="product; else loadingProduct">
+    <div class="product-container">
+        <div class="product-left">
+            <app-cached-image [src]="getProductImageUrl(product.image)" [alt]="product.title"></app-cached-image>
+        </div>
+
+        <div class="product-right">
+            <h2>{{ product.title }}</h2>
+
+            <div class="version-row-centered">
+                <span class="version-label">Version(s) :</span>
+
+                <div class="version-tabs">
+                    <span
+                        *ngFor="let version of product.versions; let i = index"
+                        [class.active]="selectedVersionIndex === i"
+                        (click)="selectedVersionIndex = i"
+                    >
+                        {{ version.label }}
+                    </span>
+                </div>
+            </div>
+
+            <p class="price">
+                Prix : <strong>{{ selectedPrice | number: '1.0-0' }} FCFA</strong>
+            </p>
+
+            <div class="d-flex gap-2">
+                <button (click)="addToCart(qty)" class="btn btn-primary">Ajouter au panier</button>
+            </div>
+
+            <div class="about">
+                <h3>À propos</h3>
+                <ul>
+                    <li *ngFor="let line of product.about">
+                        {{ line.replace('• ', '') }}
+                    </li>
+                </ul>
+            </div>
+
+            <a (click)="openPreface()" class="link-preface">Lire la préface complète</a>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <span [class.active]="selectedTab === 'description'" (click)="selectedTab = 'description'">Description</span>
+        <span [class.active]="selectedTab === 'commentaires'" (click)="selectedTab = 'commentaires'">Commentaires</span>
+    </div>
+
+    <div class="tab-content">
+        <div *ngIf="selectedTab === 'description'">
+            <p>{{ product.description }}</p>
+        </div>
+        <div *ngIf="selectedTab === 'commentaires'">
+            <h5 class="mb-3">Ajouter un commentaire</h5>
+
+            <div class="card p-3 mb-4 shadow-sm bg-light comment-card">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Votre nom</label>
+                    <input id="username" [(ngModel)]="newComment.username" class="form-control" placeholder="Ex: Kenny" maxlength="30" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="content" class="form-label">Votre avis</label>
+                    <textarea
+                        id="content"
+                        [(ngModel)]="newComment.content"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Votre commentaire..."
+                        maxlength="250"
+                    ></textarea>
+                </div>
+
+                <div class="d-flex align-items-center mb-2">
+                    <label class="form-label me-2 mb-0">Note : </label>
+                    <div class="stars clickable-stars">
+                        <ng-container *ngFor="let i of [1, 2, 3, 4]">
+                            <div class="star-wrapper" (click)="newComment.review = i">
+                                <i class="fa fa-star empty"></i>
+                                <i class="fa fa-star filled" [style.width.%]="getStarFill(i, newComment.review)"></i>
+                            </div>
+                        </ng-container>
+                        <span class="note ms-2">{{ newComment.review }}/4</span>
+                    </div>
+                </div>
+                <ng-container *ngIf="message?.text">
+                    <div class="feedback-message" [ngClass]="message.type">
+                        {{ message.text }}
+                    </div>
+                </ng-container>
+
+                <button class="btn btn-envoyer" (click)="submitComment()">Envoyer</button>
+            </div>
+
+            <h5 class="mb-3">Commentaires publiés</h5>
+
+            <div *ngIf="validatedComments.length > 0; else noComments">
+                <div class="card mb-3 shadow-sm" *ngFor="let c of validatedComments; trackBy: trackByUsername">
+                    <div class="card-body">
+                        <h6 class="card-title mb-1">
+                            <strong>{{ c.username }}</strong>
+                        </h6>
+                        <div class="stars small-stars mb-1">
+                            <ng-container *ngFor="let i of [1, 2, 3, 4]">
+                                <div class="star-wrapper">
+                                    <i class="fa fa-star empty"></i>
+                                    <i class="fa fa-star filled" [style.width.%]="getStarFill(i, c.review || 0)"></i>
+                                </div>
+                            </ng-container>
+                        </div>
+
+                        <p class="card-text mb-0">{{ c.content }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #noComments>
+                <p class="text-muted">Aucun commentaire pour le moment.</p>
+            </ng-template>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="rating-section">
+        <h3>Avis des utilisateurs</h3>
+        <p>Note moyenne :</p>
+        <div class="stars">
+            <ng-container *ngFor="let i of [1, 2, 3, 4]">
+                <div class="star-wrapper">
+                    <i class="fa fa-star empty"></i>
+                    <i class="fa fa-star filled" [style.width.%]="getStarFill(i, product.averageReview)"></i>
+                </div>
+            </ng-container>
+            <span class="note">{{ (product.averageReview || 0).toFixed(1).replace('.', ',') }}</span>
+        </div>
+    </div>
+</div>
+
+<ng-template #loadingProduct>
+    <div style="text-align: center; padding: 50px; color: #666;">
+        <p>Chargement du produit...</p>
+    </div>
+</ng-template>
+
+<app-footer></app-footer>

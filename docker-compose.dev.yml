@@ -1,0 +1,110 @@
+# Development environment with hot reload
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: ffme-mongodb-dev
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: FFME
+    volumes:
+      - mongodb_data_dev:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - ffme-network-dev
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: ffme-mongo-express
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_ROOT_USER}:${MONGO_ROOT_PASSWORD}@mongodb:27017/
+      ME_CONFIG_BASICAUTH: false
+    ports:
+      - "8081:8081"
+    networks:
+      - ffme-network-dev
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server.dev
+    container_name: ffme-server-dev
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DOCKER: "true"
+      JWT_SECRET: ${JWT_SECRET}
+      MONGO_URI: ${MONGO_URI}
+      DB_URL: ${DB_URL}
+      MAIL_API_KEY: ${MAIL_API_KEY:-}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      UPLOADS_DIR: /app/uploads
+      SERVER_URL: ${SERVER_URL:-http://localhost:5001/}
+      CLIENT_URL: ${CLIENT_URL:-http://localhost:4200/}
+      SINGPAY_CLIENT_ID: ${SINGPAY_CLIENT_ID:-}
+      SINGPAY_CLIENT_SECRET: ${SINGPAY_CLIENT_SECRET:-}
+      SINGPAY_WALLET_ID: ${SINGPAY_WALLET_ID:-}
+      SINGPAY_DISBURSEMENT_ID: ${SINGPAY_DISBURSEMENT_ID:-}
+      FTP_HOST: ${FTP_HOST:-}
+      FTP_PORT: ${FTP_PORT:-22}
+      FTP_USER: ${FTP_USER:-}
+      FTP_PASSWORD: ${FTP_PASSWORD:-}
+    volumes:
+      - ./server/app:/app/server/app
+      - ./common:/app/common
+      - server_uploads_dev:/app/uploads
+    ports:
+      - "5001:3000"
+    networks:
+      - ffme-network-dev
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client.dev
+    container_name: ffme-client-dev
+    restart: unless-stopped
+    depends_on:
+      server:
+        condition: service_healthy
+    ports:
+      - "4200:80"
+    networks:
+      - ffme-network-dev
+
+networks:
+  ffme-network-dev:
+    driver: bridge
+
+volumes:
+  mongodb_data_dev:
+    driver: local
+  server_uploads_dev:
+    driver: local

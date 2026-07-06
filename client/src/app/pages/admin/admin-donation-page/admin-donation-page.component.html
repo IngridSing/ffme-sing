@@ -1,0 +1,103 @@
+<app-admin-sidebar></app-admin-sidebar>
+
+<div class="admin-content">
+    <!-- Error Message -->
+    <div class="alert-error" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>{{ errorMessage }}</span>
+    </div>
+
+    <ng-container *ngIf="don">
+        <!-- Header -->
+        <header class="detail-header">
+            <a routerLink="/admin/dons" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Retour aux dons
+            </a>
+            <h1 class="detail-title">Detail du don</h1>
+            <p class="detail-subtitle">Don #{{ don.idDonation?.slice(-6) }}</p>
+        </header>
+
+        <div class="detail-grid">
+            <!-- Main Info Card -->
+            <div class="detail-card detail-card--main">
+                <div class="detail-card__header">
+                    <div class="detail-card__icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <div class="detail-card__header-info">
+                        <h2 class="detail-card__title">Informations du donateur</h2>
+                        <span class="detail-card__badge" [ngClass]="{
+                            'detail-card__badge--success': don.isPaid === PaymentStatus.COMPLETED,
+                            'detail-card__badge--warning': don.isPaid === PaymentStatus.PENDING,
+                            'detail-card__badge--danger': don.isPaid === PaymentStatus.FAILURE
+                        }">
+                            {{ don.isPaid === PaymentStatus.COMPLETED ? 'Paye' : don.isPaid === PaymentStatus.PENDING ? 'En attente' : 'Echoue' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="detail-card__body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">
+                                <i class="fas fa-user"></i>
+                                Nom complet
+                            </span>
+                            <span class="info-value">{{ don.firstName }} {{ don.lastName }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </span>
+                            <span class="info-value">{{ don.email }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">
+                                <i class="fas fa-phone"></i>
+                                Telephone
+                            </span>
+                            <span class="info-value">{{ don.phone || 'Non renseigne' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">
+                                <i class="fas fa-credit-card"></i>
+                                Moyen de paiement
+                            </span>
+                            <span class="info-value info-value--highlight">{{ don.paymentMethod }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Amount Card -->
+            <div class="detail-card detail-card--amount">
+                <div class="amount-display">
+                    <span class="amount-label">Montant du don</span>
+                    <span class="amount-value">{{ don.amount | number }} FCFA</span>
+                </div>
+            </div>
+
+            <!-- Status Card -->
+            <div class="detail-card detail-card--status">
+                <h3 class="detail-card__section-title">Statut du paiement</h3>
+                <div class="status-selector">
+                    <label class="status-option" *ngFor="let s of statuses">
+                        <input
+                            type="radio"
+                            name="status"
+                            [value]="s.value"
+                            [(ngModel)]="don.isPaid"
+                            (change)="onStatusChange(don.isPaid)"
+                        />
+                        <span class="status-option__box" [ngClass]="'status-option__box--' + s.value">
+                            <i [class]="s.value === PaymentStatus.COMPLETED ? 'fas fa-check' : s.value === PaymentStatus.PENDING ? 'fas fa-clock' : 'fas fa-times'"></i>
+                            {{ s.label }}
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

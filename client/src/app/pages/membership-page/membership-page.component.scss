@@ -1,0 +1,299 @@
+/* Structure générale */
+.don-form-section {
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.don-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+    max-width: 1000px;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+}
+
+/* Colonnes gauche/droite */
+.form-left {
+    flex: 1 1 45%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-right {
+    flex: 1 1 45%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Libellés */
+label {
+    font-weight: 500;
+}
+
+/* Champs texte et select */
+input[type='text'],
+input[type='email'],
+input[type='tel'],
+.select-wrapper select {
+    padding: 12px;
+    border: 1px solid #000;
+    border-radius: 6px;
+    font-size: 18px;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Zone select avec flèche */
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper select {
+    appearance: none;
+    background-color: white;
+    cursor: pointer;
+}
+
+.select-wrapper .chevron {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 14px;
+}
+
+/* Téléchargement fiche */
+.info-title {
+    font-weight: 600;
+    font-size: 16px;
+}
+.download-icon {
+    font-size: 22px;
+    text-decoration: none;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+/* Bloc pièces à fournir */
+.fournir-bloc {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+
+    p {
+        margin: 0px 0px 5px 0px;
+    }
+}
+
+.fournir-bloc ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.fournir-bloc small {
+    font-style: italic;
+    font-size: 12px;
+}
+
+/* Checkbox consentement */
+.checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.checkbox-container input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+}
+
+.error-text {
+    color: red;
+    font-weight: 500;
+}
+
+/* Bouton submit */
+.submit-button {
+    margin-top: 10px;
+    padding: 14px 0;
+    background-color: #002bbb;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+/* Messages d'erreur */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.telechargement-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.download-icon svg {
+    vertical-align: middle;
+    color: #002bbb;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.download-icon svg:hover {
+    transform: scale(1.1);
+}
+
+.fournir-bloc {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.fournir-bloc ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.fournir-bloc small {
+    font-style: italic;
+    font-size: 12px;
+}
+
+.document-upload {
+    border: 2px dashed transparent;
+    padding: 12px;
+    border-radius: 6px;
+    background-color: #f1f1f1;
+    margin-bottom: 16px;
+    transition: border-color 0.3s;
+    position: relative;
+}
+
+.document-upload:hover {
+    border-color: #002bbb;
+}
+
+.document-upload input[type='file'] {
+    display: none;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.document-upload span {
+    display: block;
+    margin-top: 5px;
+    font-size: 13px;
+    color: #444;
+    font-style: italic;
+}
+
+input[type='file']::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+input[type='file']::before {
+    content: 'Choisir un fichier';
+    display: inline-block;
+    background: #002bbb;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+input[type='file']:hover::before {
+    background: #001e94;
+}
+
+/* Label personnalisé agissant comme bouton */
+.custom-file-label::after {
+    content: 'Choisir un fichier';
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #002bbb;
+    color: white;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.file-preview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+.file-preview button {
+    background-color: transparent;
+    border: none;
+    color: #c00;
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    transition: transform 0.2s ease;
+}
+
+.file-preview button:hover {
+    transform: scale(1.2);
+}
+
+.error {
+    color: red;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.spinner {
+    border: 6px solid #ccc;
+    border-top: 6px solid #0d47a1;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

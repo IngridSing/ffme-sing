@@ -1,0 +1,95 @@
+/* ===== SECTION PARTENAIRES PROFESSIONNELLE ===== */
+
+.partenaires {
+    background-color: var(--blanc);
+    padding: var(--space-2xl) var(--space-md);
+    text-align: center;
+    position: relative;
+
+    /* Bordure supérieure décorative */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--bleu) 0%, var(--bleu-clair) 100%);
+        border-radius: 2px;
+    }
+
+    .title {
+        font-family: var(--font-primary);
+        font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
+        font-weight: 600;
+        color: var(--bleu);
+        margin-bottom: var(--space-xl);
+        letter-spacing: -0.02em;
+        position: relative;
+
+        &::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--jaune) 0%, var(--or) 100%);
+            margin: var(--space-md) auto 0;
+            border-radius: 2px;
+        }
+    }
+
+    .logo-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        max-width: var(--max-width-xl);
+        margin: 0 auto;
+        gap: var(--space-xl);
+        padding: var(--space-lg) 0;
+
+        img {
+            height: 140px;
+            max-width: 220px;
+            object-fit: contain;
+            transition: all var(--transition-normal);
+            filter: grayscale(100%);
+            opacity: 0.7;
+            padding: var(--space-sm);
+
+            &:hover {
+                filter: grayscale(0%);
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+    }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .partenaires {
+        padding: var(--space-xl) var(--space-sm);
+
+        .title {
+            font-size: var(--text-3xl);
+        }
+
+        .logo-grid {
+            gap: var(--space-lg);
+
+            img {
+                height: 100px;
+                max-width: 160px;
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .partenaires .logo-grid img {
+        height: 85px;
+        max-width: 135px;
+    }
+}

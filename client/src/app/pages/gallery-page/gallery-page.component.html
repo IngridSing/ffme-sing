@@ -1,0 +1,242 @@
+<app-navbar customBackground="#588bbc"></app-navbar>
+
+<main class="gallery-container">
+    <app-title titre="GALERIE PHOTO"></app-title>
+
+    <div class="gallery-header">
+        <p class="gallery-subtitle">Découvrez les moments forts de nos événements</p>
+
+        <!-- Barre de recherche -->
+        <div class="search-container">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+                type="text"
+                class="search-input"
+                placeholder="Rechercher un événement..."
+                [(ngModel)]="searchQuery"
+                (input)="onSearchChange()"
+            />
+            <button class="clear-search" *ngIf="searchQuery" (click)="clearSearch()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtres par chips -->
+    <div class="filter-chips">
+        <button
+            class="chip"
+            [class.active]="!selectedEvent"
+            (click)="selectEvent(null)"
+        >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            Tous
+            <span class="chip-count">{{ totalPhotos }}</span>
+        </button>
+
+        <button
+            *ngFor="let evt of events"
+            class="chip"
+            [class.active]="selectedEvent === evt"
+            (click)="selectEvent(evt)"
+        >
+            {{ evt }}
+            <span class="chip-count">{{ getEventCount(evt) }}</span>
+        </button>
+    </div>
+
+    <!-- Compteur de résultats -->
+    <div class="results-info" *ngIf="!isLoading && (photosToDisplay.length > 0 || searchQuery || selectedEvent)">
+        <span *ngIf="!searchQuery">
+            {{ filteredTotal }} photo{{ filteredTotal > 1 ? 's' : '' }}
+            <span *ngIf="selectedEvent"> dans "{{ selectedEvent }}"</span>
+            <span *ngIf="totalPages > 1"> — page {{ currentPage }} / {{ totalPages }}</span>
+        </span>
+        <span *ngIf="searchQuery">
+            {{ filteredTotal }} résultat{{ filteredTotal > 1 ? 's' : '' }} pour "{{ searchQuery }}"
+            <span *ngIf="totalPages > 1"> — page {{ currentPage }} / {{ totalPages }}</span>
+        </span>
+    </div>
+
+    <!-- Chargement initial -->
+    <div class="loading-state" *ngIf="isLoading">
+        <span class="loading-spinner"></span>
+        <p>Chargement de la galerie...</p>
+    </div>
+
+    <!-- État vide -->
+    <div class="empty-state" *ngIf="photosToDisplay.length === 0 && !isLoading && !isLoadingPage">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+        </svg>
+        <h3>Aucune photo trouvée</h3>
+        <p *ngIf="searchQuery">Essayez avec d'autres mots-clés</p>
+        <p *ngIf="!searchQuery && selectedEvent">Aucune photo pour cet événement</p>
+    </div>
+
+    <!-- Grille de photos -->
+    <section class="gallery-grid" *ngIf="photosToDisplay.length > 0" [class.loading]="isLoadingPage">
+        <article
+            class="gallery-card"
+            *ngFor="let photo of photosToDisplay; let i = index"
+            [class.loaded]="photo.loaded"
+            (click)="openLightbox(i)"
+        >
+            <div class="card-image">
+                <div class="skeleton" *ngIf="!photo.loaded"></div>
+                <img
+                    [src]="photo.imageUrl"
+                    [alt]="photo.eventName"
+                    loading="lazy"
+                    (load)="onImageLoad(photo)"
+                    [class.visible]="photo.loaded"
+                />
+                <div class="card-overlay">
+                    <div class="overlay-content">
+                        <span class="event-badge">{{ photo.eventName }}</span>
+                        <p class="photo-description" *ngIf="photo.description">{{ photo.description }}</p>
+                    </div>
+                    <button class="expand-btn" title="Agrandir">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 3 21 3 21 9"/>
+                            <polyline points="9 21 3 21 3 15"/>
+                            <line x1="21" y1="3" x2="14" y2="10"/>
+                            <line x1="3" y1="21" x2="10" y2="14"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <!-- Pagination -->
+    <nav class="pagination" *ngIf="filteredTotal > 0 && !isLoading" aria-label="Pagination de la galerie">
+        <button
+            type="button"
+            class="pagination-btn pagination-nav"
+            [disabled]="currentPage === 1 || isLoadingPage"
+            (click)="goToPage(currentPage - 1)"
+            aria-label="Page précédente"
+        >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            <span>Précédent</span>
+        </button>
+
+        <div class="pagination-pages" role="group" aria-label="Numéros de page">
+            <button
+                type="button"
+                *ngFor="let page of pageNumbers"
+                class="pagination-btn page-number"
+                [class.active]="page === currentPage"
+                [disabled]="isLoadingPage"
+                [attr.aria-current]="page === currentPage ? 'page' : null"
+                [attr.aria-label]="'Page ' + page"
+                (click)="goToPage(page)"
+            >
+                {{ page }}
+            </button>
+        </div>
+
+        <span class="pagination-status" aria-live="polite">
+            Page <strong>{{ currentPage }}</strong> sur <strong>{{ totalPages }}</strong>
+        </span>
+
+        <button
+            type="button"
+            class="pagination-btn pagination-nav"
+            [disabled]="currentPage === totalPages || isLoadingPage"
+            (click)="goToPage(currentPage + 1)"
+            aria-label="Page suivante"
+        >
+            <span>Suivant</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        </button>
+    </nav>
+
+    <!-- Lightbox moderne -->
+    <div
+        class="lightbox"
+        *ngIf="lightboxOpen"
+        (click)="closeLightbox()"
+        (keydown.escape)="closeLightbox()"
+        (keydown.arrowLeft)="prevPhoto()"
+        (keydown.arrowRight)="nextPhoto()"
+        [@fadeIn]
+    >
+        <div class="lightbox-backdrop"></div>
+
+        <button class="lightbox-close" (click)="closeLightbox()" title="Fermer (Échap)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+
+        <button
+            class="lightbox-nav lightbox-prev"
+            (click)="prevPhoto(); $event.stopPropagation()"
+            *ngIf="photosToDisplay.length > 1"
+            title="Photo précédente"
+        >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+        </button>
+
+        <div class="lightbox-content" (click)="$event.stopPropagation()">
+            <div class="lightbox-image-wrapper">
+                <img
+                    [src]="currentLightboxPhoto?.imageUrl"
+                    [alt]="currentLightboxPhoto?.eventName"
+                    class="lightbox-image"
+                />
+            </div>
+            <div class="lightbox-info">
+                <span class="lightbox-counter">{{ currentIndex + 1 }} / {{ photosToDisplay.length }} (page {{ currentPage }})</span>
+                <h3 class="lightbox-title">{{ currentLightboxPhoto?.eventName }}</h3>
+                <p class="lightbox-description" *ngIf="currentLightboxPhoto?.description">
+                    {{ currentLightboxPhoto?.description }}
+                </p>
+            </div>
+        </div>
+
+        <button
+            class="lightbox-nav lightbox-next"
+            (click)="nextPhoto(); $event.stopPropagation()"
+            *ngIf="photosToDisplay.length > 1"
+            title="Photo suivante"
+        >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        </button>
+
+        <!-- Indicateurs de navigation -->
+        <div class="lightbox-dots" *ngIf="photosToDisplay.length > 1 && photosToDisplay.length <= 6" (click)="$event.stopPropagation()">
+            <button
+                *ngFor="let photo of photosToDisplay; let i = index"
+                class="dot"
+                [class.active]="i === currentIndex"
+                (click)="goToPhoto(i)"
+            ></button>
+        </div>
+    </div>
+</main>
+
+<app-footer></app-footer>

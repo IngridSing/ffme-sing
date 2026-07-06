@@ -1,0 +1,85 @@
+name: Deploy FFME to Production
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+jobs:
+    deploy:
+        name: Build & Deploy Docker
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Deploy via SSH
+              uses: appleboy/ssh-action@v1
+              with:
+                  host: ${{ secrets.SERVER_HOST }}
+                  username: ${{ secrets.SERVER_USER }}
+                  key: ${{ secrets.PRIVATE_KEY }}
+                  passphrase: ${{ secrets.PASSPHRASE_KEY }}
+                  port: ${{ secrets.SERVER_PORT }}
+                  command_timeout: 30m
+                  script: |
+                      set -e
+                      echo "=== DÉPLOIEMENT FFME - PRODUCTION ==="
+
+                      DEPLOY_PATH="${{ secrets.SERVER_PATH }}/ffme"
+                      GIT_REPO="https://${{ secrets.GIT_PAT }}@github.com/Gowthersan/FFME.git"
+
+                      echo "=== 1. Préparation du répertoire ==="
+                      mkdir -p "$DEPLOY_PATH"
+                      cd "$DEPLOY_PATH"
+
+                      if [ -d .git ]; then
+                          echo "Mise à jour du repo..."
+                          git fetch origin --prune
+                          git reset --hard origin/main
+                          git clean -fd
+                      else
+                          echo "Clonage du repo..."
+                          rm -rf * .[!.]* 2>/dev/null || true
+                          git clone --depth=1 --branch main "$GIT_REPO" .
+                      fi
+                      echo "Commit: $(git log -1 --oneline)"
+
+                      echo "=== 2. Création du fichier .env ==="
+                      echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
+                      echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+                      echo "FTP_HOST=${{ secrets.FTP_HOST }}" >> .env
+                      echo "FTP_PORT=${{ secrets.FTP_PORT }}" >> .env
+                      echo "FTP_USER=${{ secrets.FTP_USER }}" >> .env
+                      echo "FTP_PASSWORD=${{ secrets.FTP_PASSWORD }}" >> .env
+                      echo "SMTP_HOST=${{ secrets.SMTP_HOST }}" >> .env
+                      echo "SMTP_PORT=${{ secrets.SMTP_PORT }}" >> .env
+                      echo "SMTP_USER=${{ secrets.SMTP_USER }}" >> .env
+                      echo "SMTP_PASS=${{ secrets.SMTP_PASS }}" >> .env
+                      echo "SINGPAY_CLIENT_ID=${{ secrets.SINGPAY_CLIENT_ID }}" >> .env
+                      echo "SINGPAY_CLIENT_SECRET=${{ secrets.SINGPAY_CLIENT_SECRET }}" >> .env
+                      echo "SINGPAY_WALLET_ID=${{ secrets.SINGPAY_WALLET_ID }}" >> .env
+                      echo "SINGPAY_DISBURSEMENT_ID=${{ secrets.SINGPAY_DISBURSEMENT_ID }}" >> .env
+                      echo "Fichier .env créé"
+
+                      echo "=== 3. Vérification Docker ==="
+                      docker --version
+                      docker compose version
+
+                      echo "=== 4. Arrêt des anciens containers ==="
+                      docker compose down --remove-orphans 2>/dev/null || true
+                      docker stop ffme-client ffme-server 2>/dev/null || true
+                      docker rm ffme-client ffme-server 2>/dev/null || true
+
+                      echo "=== 5. Build des images Docker ==="
+                      docker compose build --no-cache
+
+                      echo "=== 6. Démarrage des containers ==="
+                      docker compose up -d
+
+                      echo "=== 7. Vérification ==="
+                      sleep 15
+                      docker ps
+                      curl -sf http://localhost:3000/api/health && echo "Server OK" || echo "Server FAILED"
+                      curl -sf http://localhost:4200 && echo "Client OK" || echo "Client FAILED"
+
+                      echo "=== DÉPLOIEMENT TERMINÉ ==="

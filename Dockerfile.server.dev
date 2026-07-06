@@ -1,0 +1,31 @@
+# Development Dockerfile with hot reload support
+FROM node:20-alpine
+
+WORKDIR /app
+
+RUN apk add --no-cache wget \
+    && npm install -g pnpm nodemon
+
+COPY common ./common
+
+COPY server/package.json server/pnpm-lock.yaml ./server/
+
+WORKDIR /app/server
+RUN pnpm install --frozen-lockfile \
+    && pnpm rebuild bcrypt sharp
+
+WORKDIR /app
+COPY server ./server
+
+WORKDIR /app/server
+
+RUN mkdir -p /app/uploads
+
+EXPOSE 3000
+
+ENV NODE_ENV=development
+ENV PORT=3000
+ENV DOCKER=true
+ENV UPLOADS_DIR=/app/uploads
+
+CMD ["pnpm", "start"]

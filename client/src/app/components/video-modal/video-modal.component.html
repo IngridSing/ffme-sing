@@ -1,0 +1,18 @@
+<div class="video-modal" (click)="onBackdropClick($event)">
+    <div class="video-modal__container">
+        <div class="video-modal__header">
+            <h3 class="video-modal__title">{{ title }}</h3>
+            <button class="video-modal__close" (click)="close()" title="Fermer">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="video-modal__content">
+            <iframe
+                [src]="embedUrl | safeUrl"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+            ></iframe>
+        </div>
+    </div>
+</div>

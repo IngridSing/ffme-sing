@@ -1,0 +1,187 @@
+@use '../../../../styles/admin/variables' as *;
+
+.stat-card {
+    @include admin-card;
+    display: flex;
+    align-items: flex-start;
+    gap: $admin-spacing-lg;
+    padding: $admin-spacing-lg;
+    @include admin-transition(transform, box-shadow);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: $admin-shadow-lg;
+    }
+
+    // === ICON ===
+    &__icon {
+        width: 56px;
+        height: 56px;
+        border-radius: $admin-border-radius-lg;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 24px;
+        @include admin-transition(transform);
+
+        .stat-card:hover & {
+            transform: scale(1.05);
+        }
+    }
+
+    // === CONTENT ===
+    &__content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__title {
+        display: block;
+        font-size: $admin-font-size-sm;
+        font-weight: $admin-font-weight-medium;
+        color: $admin-text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: $admin-spacing-xs;
+    }
+
+    &__value {
+        display: block;
+        font-size: $admin-font-size-3xl;
+        font-weight: $admin-font-weight-bold;
+        color: $admin-text-primary;
+        line-height: $admin-line-height-tight;
+        @include admin-text-truncate;
+    }
+
+    &__footer {
+        margin-top: $admin-spacing-sm;
+        display: flex;
+        align-items: center;
+        gap: $admin-spacing-sm;
+    }
+
+    &__subtitle {
+        font-size: $admin-font-size-sm;
+        color: $admin-text-secondary;
+    }
+
+    &__trend {
+        display: inline-flex;
+        align-items: center;
+        gap: $admin-spacing-xs;
+        font-size: $admin-font-size-sm;
+        font-weight: $admin-font-weight-semibold;
+        padding: 2px 8px;
+        border-radius: $admin-border-radius-sm;
+
+        i {
+            font-size: 10px;
+        }
+
+        &--up {
+            color: $status-success-dark;
+            background: $status-success-light;
+        }
+
+        &--down {
+            color: $status-danger-dark;
+            background: $status-danger-light;
+        }
+    }
+
+    &__trend-label {
+        font-weight: $admin-font-weight-normal;
+        color: $admin-text-muted;
+        margin-left: $admin-spacing-xs;
+    }
+
+    // === VARIANTS ===
+    &--primary {
+        .stat-card__icon {
+            background: rgba($admin-primary, 0.1);
+            color: $admin-primary;
+        }
+    }
+
+    &--success {
+        .stat-card__icon {
+            background: $status-success-light;
+            color: $status-success-dark;
+        }
+    }
+
+    &--info {
+        .stat-card__icon {
+            background: $status-info-light;
+            color: $status-info-dark;
+        }
+    }
+
+    &--warning {
+        .stat-card__icon {
+            background: $status-warning-light;
+            color: $status-warning-dark;
+        }
+    }
+
+    &--danger {
+        .stat-card__icon {
+            background: $status-danger-light;
+            color: $status-danger-dark;
+        }
+    }
+
+    &--neutral {
+        .stat-card__icon {
+            background: $status-neutral-light;
+            color: $status-neutral-dark;
+        }
+    }
+
+    // === SKELETON LOADING ===
+    &__skeleton {
+        background: linear-gradient(
+            90deg,
+            $admin-border 0px,
+            lighten($admin-border, 5%) 40px,
+            $admin-border 80px
+        );
+        background-size: 200px 100%;
+        animation: admin-skeleton-loading 1.5s ease-in-out infinite;
+        border-radius: $admin-border-radius-sm;
+
+        &--sm {
+            height: 14px;
+            width: 80px;
+        }
+
+        &--lg {
+            height: 36px;
+            width: 120px;
+            margin: $admin-spacing-xs 0;
+        }
+
+        &--xs {
+            height: 12px;
+            width: 100px;
+        }
+    }
+
+    &--loading {
+        .stat-card__icon {
+            width: 56px;
+            height: 56px;
+        }
+    }
+}
+
+@keyframes admin-skeleton-loading {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}

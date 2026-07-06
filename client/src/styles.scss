@@ -1,0 +1,365 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+@use './app/pages/material-page/material-page.component.theme' as material-page;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+$indigo-pink-theme: mat.m2-define-light-theme(
+    (
+        color: (
+            primary: mat.m2-define-palette(mat.$m2-indigo-palette),
+            accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400),
+            warn: mat.m2-define-palette(mat.$m2-red-palette),
+        ),
+    )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($indigo-pink-theme);
+@include material-page.theme($indigo-pink-theme);
+
+.indigo-pink-theme {
+    // Nothing to do. This is the default theme
+}
+
+.deeppurple-amber-theme {
+    $deeppurple-amber-theme: mat.m2-define-light-theme(
+        (
+            color: (
+                primary: mat.m2-define-palette(mat.$m2-deep-purple-palette),
+                accent: mat.m2-define-palette(mat.$m2-amber-palette, A200, A100, A400),
+            ),
+        )
+    );
+    @include mat.all-component-colors($deeppurple-amber-theme);
+    @include material-page.theme($deeppurple-amber-theme);
+}
+
+.pink-bluegrey-theme {
+    $pink-bluegrey-theme: mat.m2-define-dark-theme(
+        (
+            color: (
+                primary: mat.m2-define-palette(mat.$m2-pink-palette, 700, 500, 900),
+                accent: mat.m2-define-palette(mat.$m2-blue-grey-palette, A200, A100, A400),
+            ),
+        )
+    );
+    @include mat.all-component-colors($pink-bluegrey-theme);
+    @include material-page.theme($pink-bluegrey-theme);
+}
+
+.purple-green-theme {
+    $purple-green-theme: mat.m2-define-dark-theme(
+        (
+            color: (
+                primary: mat.m2-define-palette(mat.$m2-purple-palette, 700, 500, 800),
+                accent: mat.m2-define-palette(mat.$m2-green-palette, A200, A100, A400),
+            ),
+        )
+    );
+    @include mat.all-component-colors($purple-green-theme);
+    @include material-page.theme($purple-green-theme);
+}
+
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: auto;
+}
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+:root {
+    /* ===== COULEURS PRINCIPALES ===== */
+    /* Bleus - Palette institutionnelle */
+    --blanc: #ffffff;
+    --bleu: #1445AF;
+    --bleu-clair: #305CB8;
+    --bleu-clair-clair: #C8DDF1;
+    --bleu-gris-profond: #3E6A8D;
+    --bleu-nuanc: #588BBC;
+    --bleu-fonce: #0D2E5C;
+
+    /* Accents */
+    --jaune: #F7E649;
+    --jaune-pale: #F5ECA1;
+    --or: #D4A017;
+    --variable-collection-jaune: #F7E649;
+
+    /* Secondaires */
+    --marron: #954717;
+    --gris: #808080;
+    --gris-clair: #F5F7FA;
+    --gris-texte: #4A4A4A;
+
+    /* ===== ESPACEMENTS ===== */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2.5rem;
+    --space-xl: 4rem;
+    --space-2xl: 6rem;
+
+    /* ===== TYPOGRAPHIE ===== */
+    --font-primary: 'Poppins', sans-serif;
+    --font-serif: 'Georgia', serif;
+    --font-display: 'Pacifico', cursive;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 2rem;
+    --text-4xl: 2.5rem;
+    --text-5xl: 3rem;
+
+    /* ===== OMBRES PROFESSIONNELLES ===== */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.15);
+
+    /* ===== BORDURES ===== */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 20px;
+    --radius-full: 9999px;
+
+    /* ===== TRANSITIONS ===== */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+
+    /* ===== LARGEURS MAX ===== */
+    --max-width-sm: 640px;
+    --max-width-md: 768px;
+    --max-width-lg: 1024px;
+    --max-width-xl: 1200px;
+    --max-width-2xl: 1400px;
+}
+
+body.gallery-page app-navbar {
+    background-color: #4a6a89;
+}
+
+/* ===== STYLES UTILITAIRES ===== */
+
+/* Container principal */
+.container {
+    width: 100%;
+    max-width: var(--max-width-xl);
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+}
+
+.container-sm {
+    max-width: var(--max-width-md);
+}
+
+.container-lg {
+    max-width: var(--max-width-2xl);
+}
+
+/* Sections */
+.section {
+    padding: var(--space-xl) 0;
+}
+
+.section-lg {
+    padding: var(--space-2xl) 0;
+}
+
+/* Titres de sections */
+.section-title {
+    font-family: var(--font-primary);
+    font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
+    font-weight: 600;
+    color: var(--bleu);
+    text-align: center;
+    margin-bottom: var(--space-lg);
+    letter-spacing: -0.02em;
+}
+
+.section-title--light {
+    color: var(--blanc);
+}
+
+.section-title--brown {
+    color: var(--marron);
+}
+
+/* Boutons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-lg);
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.btn-primary {
+    background-color: var(--bleu);
+    color: var(--blanc);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+    background-color: var(--bleu-fonce);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+    background-color: var(--jaune);
+    color: var(--bleu-fonce);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary:hover {
+    background-color: var(--or);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--bleu);
+    border: 2px solid var(--bleu);
+}
+
+.btn-outline:hover {
+    background-color: var(--bleu);
+    color: var(--blanc);
+}
+
+.btn-lg {
+    padding: var(--space-md) var(--space-xl);
+    font-size: var(--text-lg);
+}
+
+/* Cards */
+.card {
+    background: var(--blanc);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+
+/* Textes */
+.text-muted {
+    color: var(--gris-texte);
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.6s ease forwards;
+}
+
+.animate-fadeInUp {
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+/* Overlay gradient */
+.overlay-gradient {
+    background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.7) 100%
+    );
+}
+
+/* Sidebar admin */
+.with-sidebar {
+    margin-left: 250px;
+    min-height: 100vh;
+    background-color: #fff;
+    padding: var(--space-sm);
+    transition: margin-left 0.3s ease;
+}
+
+/* Responsive admin sidebar */
+@media (max-width: 768px) {
+    .with-sidebar {
+        margin-left: 0;
+        padding-top: 70px; /* Space for mobile header */
+    }
+}
+
+/* Focus states pour accessibilité */
+*:focus-visible {
+    outline: 2px solid var(--bleu);
+    outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+    background-color: var(--bleu-clair-clair);
+    color: var(--bleu-fonce);
+}

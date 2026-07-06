@@ -1,0 +1,122 @@
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5)" (click)="close()">
+    <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ editProduct ? 'Modifier le produit' : 'Ajouter un produit' }}</h5>
+                <button type="button" class="btn-close" (click)="close()"></button>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="productForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label">Titre</label>
+                        <input
+                            class="form-control"
+                            formControlName="title"
+                            [class.is-invalid]="productForm.get('title')?.invalid && productForm.get('title')?.touched"
+                        />
+                        <small class="text-danger" *ngIf="productForm.get('title')?.invalid && productForm.get('title')?.touched"
+                            >Le titre est requis.</small
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Type</label>
+                        <input
+                            class="form-control"
+                            formControlName="type"
+                            [class.is-invalid]="productForm.get('type')?.invalid && productForm.get('type')?.touched"
+                        />
+                        <small class="text-danger" *ngIf="productForm.get('type')?.invalid && productForm.get('type')?.touched"
+                            >Le type est requis.</small
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea
+                            class="form-control"
+                            formControlName="description"
+                            [class.is-invalid]="productForm.get('description')?.invalid && productForm.get('description')?.touched"
+                        ></textarea>
+                        <small class="text-danger" *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched"
+                            >La description est requise.</small
+                        >
+                    </div>
+
+                    <div formArrayName="aboutInfos" class="mb-3">
+                        <label><strong>À propos du produit (informations clés)</strong></label>
+                        <div *ngFor="let info of aboutInfos.controls; let i = index" [formGroupName]="i" class="d-flex align-items-center mb-2 gap-2">
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Ex: Auteur : François MEYE"
+                                formControlName="info"
+                                [class.is-invalid]="info.get('info')?.invalid && info.get('info')?.touched"
+                            />
+                            <button type="button" class="btn btn-outline-danger" (click)="removeAboutInfo(i)" *ngIf="aboutInfos.length > 1">
+                                🗑️
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mt-2" (click)="addAboutInfo()">➕ Ajouter une info</button>
+
+                        <small class="text-danger" *ngIf="aboutInfos.invalid && productForm.touched"> Au moins une information est requise. </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Lien complémentaire (facultatif)</label>
+                        <input type="text" class="form-control" placeholder="https://..." formControlName="additionalLink" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="stock" class="form-label">Stock disponible</label>
+                        <input
+                            type="number"
+                            id="stock"
+                            class="form-control"
+                            formControlName="stock"
+                            min="0"
+                            [class.is-invalid]="productForm.get('stock')?.invalid && productForm.get('stock')?.touched"
+                        />
+                        <small class="text-danger" *ngIf="productForm.get('stock')?.invalid && productForm.get('stock')?.touched">
+                            Veuillez indiquer un stock valide.
+                        </small>
+                    </div>
+
+                    <div formArrayName="versions" class="mb-3">
+                        <label><strong>Versions du produit</strong></label>
+                        <div
+                            *ngFor="let version of versions.controls; let i = index"
+                            [formGroupName]="i"
+                            class="d-flex align-items-center mb-2 gap-2"
+                        >
+                            <input type="text" class="form-control" placeholder="Label (ex: S, M, Papier...)" formControlName="label" />
+                            <input type="number" class="form-control" placeholder="Prix" formControlName="price" />
+                            <button type="button" class="btn btn-outline-danger" (click)="removeVersion(i)" *ngIf="versions.length > 1">🗑️</button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mt-2" (click)="addVersion()">➕ Ajouter une version</button>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Image</label>
+                        <input
+                            type="file"
+                            class="form-control"
+                            (change)="onFileSelected($event)"
+                            accept="image/*"
+                            [class.is-invalid]="imageInvalid"
+                        />
+                        <small class="text-danger" *ngIf="imageInvalid">Veuillez sélectionner une image.</small>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary me-2" (click)="close()">Annuler</button>
+                        <button type="submit" class="btn btn-primary">
+                            {{ editProduct ? 'Enregistrer' : 'Ajouter' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

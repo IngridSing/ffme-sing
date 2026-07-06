@@ -1,0 +1,106 @@
+<div class="login-page">
+    <!-- Left Panel - Branding -->
+    <div class="login-branding">
+        <div class="branding-content">
+            <div class="branding-logo">
+                <img src="/assets/logo.png" alt="Logo Fondation" />
+            </div>
+            <h1 class="branding-title">Fondation Francois Meye</h1>
+            <p class="branding-subtitle">Espace d'administration</p>
+            <div class="branding-features">
+                <div class="feature">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Tableau de bord complet</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-users"></i>
+                    <span>Gestion des membres</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <span>Suivi des dons</span>
+                </div>
+            </div>
+        </div>
+        <div class="branding-footer">
+            <span>&copy; {{ currentYear }} Fondation Francois Meye</span>
+        </div>
+    </div>
+
+    <!-- Right Panel - Login Form -->
+    <div class="login-form-panel">
+        <div class="login-form-container">
+            <div class="login-header">
+                <div class="login-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h2>Connexion</h2>
+                <p>Connectez-vous pour acceder a votre espace</p>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
+                <!-- Error Message -->
+                <div class="alert-error" *ngIf="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>{{ errorMessage }}</span>
+                </div>
+
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i>
+                        Adresse email
+                    </label>
+                    <input
+                        type="email"
+                        id="email"
+                        formControlName="email"
+                        placeholder="admin@fondation.ga"
+                        [class.invalid]="form.get('email')?.touched && form.get('email')?.invalid"
+                    />
+                    <div class="field-error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+                        <span *ngIf="form.get('email')?.errors?.['required']">L'adresse email est requise</span>
+                        <span *ngIf="form.get('email')?.errors?.['email']">Adresse email invalide</span>
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-key"></i>
+                        Mot de passe
+                    </label>
+                    <input
+                        type="password"
+                        id="password"
+                        formControlName="password"
+                        placeholder="Entrez votre mot de passe"
+                        [class.invalid]="form.get('password')?.touched && form.get('password')?.invalid"
+                    />
+                    <div class="field-error" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
+                        <span *ngIf="form.get('password')?.errors?.['required']">Le mot de passe est requis</span>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-login" [disabled]="isLoading || form.invalid">
+                    <span class="btn-content" *ngIf="!isLoading">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Se connecter
+                    </span>
+                    <span class="btn-loading" *ngIf="isLoading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        Connexion en cours...
+                    </span>
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <a routerLink="/" class="back-link">
+                    <i class="fas fa-arrow-left"></i>
+                    Retour au site
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

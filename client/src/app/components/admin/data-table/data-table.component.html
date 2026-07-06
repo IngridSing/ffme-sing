@@ -1,0 +1,220 @@
+<div class="admin-table-wrapper">
+    <!-- Toolbar -->
+    <div class="admin-table-toolbar">
+        <div class="admin-table-toolbar__left">
+            <h3 class="admin-table-toolbar__title" *ngIf="title">{{ title }}</h3>
+            <span class="admin-table-toolbar__count">{{ filteredData.length }} élément(s)</span>
+        </div>
+
+        <div class="admin-table-toolbar__right">
+            <!-- Search -->
+            <div class="admin-table-search" *ngIf="searchable">
+                <i class="fas fa-search admin-table-search__icon"></i>
+                <input
+                    type="text"
+                    class="admin-table-search__input"
+                    placeholder="Rechercher..."
+                    [(ngModel)]="searchTerm"
+                    (input)="onSearch()"
+                />
+                <button
+                    class="admin-table-search__clear"
+                    *ngIf="searchTerm"
+                    (click)="clearSearch()"
+                >
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Export buttons -->
+            <div class="admin-table-export" *ngIf="exportable">
+                <button class="admin-table-btn" (click)="exportCSV()" title="Exporter en CSV">
+                    <i class="fas fa-file-csv"></i>
+                    CSV
+                </button>
+                <button class="admin-table-btn" (click)="exportExcel()" title="Exporter en Excel">
+                    <i class="fas fa-file-excel"></i>
+                    Excel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Selection bar -->
+    <div class="admin-table-selection" *ngIf="selectable && selectedRows.size > 0">
+        <span class="admin-table-selection__count">
+            {{ selectedRows.size }} élément(s) sélectionné(s)
+        </span>
+        <button class="admin-table-selection__clear" (click)="clearSelection()">
+            <i class="fas fa-times"></i>
+            Annuler la sélection
+        </button>
+    </div>
+
+    <!-- Table -->
+    <div class="admin-table-responsive" [class.admin-table-loading]="loading">
+        <table class="admin-table">
+            <thead class="admin-table__head">
+                <tr class="admin-table__header-row">
+                    <!-- Checkbox column -->
+                    <th class="admin-table__checkbox" *ngIf="selectable">
+                        <input
+                            type="checkbox"
+                            [checked]="allSelected"
+                            (change)="toggleSelectAll()"
+                            class="admin-checkbox"
+                        />
+                    </th>
+
+                    <!-- Data columns -->
+                    <th
+                        *ngFor="let column of columns"
+                        [style.width]="column.width"
+                        [class.admin-table__sortable]="column.sortable"
+                        [class.sorted]="sortColumn === column.key"
+                        (click)="sort(column)"
+                    >
+                        {{ column.label }}
+                        <i
+                            *ngIf="column.sortable"
+                            [class]="getSortIcon(column)"
+                            class="admin-table__sort-icon"
+                            [class.admin-table__sort-icon--asc]="sortColumn === column.key && sortDirection === 'asc'"
+                        ></i>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody class="admin-table__body">
+                <!-- Data rows -->
+                <tr
+                    *ngFor="let row of displayedData"
+                    [class.selected]="isSelected(row)"
+                    [class.clickable]="rowClick.observers.length > 0"
+                    (click)="onRowClick(row)"
+                >
+                    <!-- Checkbox -->
+                    <td class="admin-table__checkbox" *ngIf="selectable">
+                        <input
+                            type="checkbox"
+                            [checked]="isSelected(row)"
+                            (click)="toggleRowSelection(row, $event)"
+                            class="admin-checkbox"
+                        />
+                    </td>
+
+                    <!-- Data cells -->
+                    <td *ngFor="let column of columns">
+                        <ng-container [ngSwitch]="column.type">
+                            <!-- Status badge -->
+                            <span
+                                *ngSwitchCase="'status'"
+                                class="admin-badge"
+                                [ngClass]="getStatusClass(getCellValue(row, column))"
+                            >
+                                {{ getStatusLabel(getCellValue(row, column)) }}
+                            </span>
+
+                            <!-- Currency -->
+                            <span *ngSwitchCase="'currency'" class="admin-currency">
+                                {{ getCellValue(row, column) | number }} FCFA
+                            </span>
+
+                            <!-- Date -->
+                            <span *ngSwitchCase="'date'">
+                                {{ getCellValue(row, column) | date:'dd/MM/yyyy' }}
+                            </span>
+
+                            <!-- Default text -->
+                            <span *ngSwitchDefault>
+                                {{ column.render ? column.render(getCellValue(row, column), row) : getCellValue(row, column) }}
+                            </span>
+                        </ng-container>
+                    </td>
+                </tr>
+
+                <!-- Empty state -->
+                <tr *ngIf="!loading && displayedData.length === 0" class="admin-table__empty">
+                    <td [attr.colspan]="columns.length + (selectable ? 1 : 0)">
+                        <div class="admin-table__empty-icon">
+                            <i [class]="emptyIcon"></i>
+                        </div>
+                        <div class="admin-table__empty-title">{{ emptyMessage }}</div>
+                        <div class="admin-table__empty-text" *ngIf="searchTerm">
+                            Essayez de modifier votre recherche
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Loading skeleton -->
+                <ng-container *ngIf="loading">
+                    <tr *ngFor="let i of [1,2,3,4,5]" class="admin-table__skeleton-row">
+                        <td *ngIf="selectable" class="admin-table__checkbox">
+                            <div class="admin-skeleton" style="width: 16px; height: 16px;"></div>
+                        </td>
+                        <td *ngFor="let column of columns">
+                            <div class="admin-skeleton" style="height: 16px; width: 80%;"></div>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="admin-table-pagination" *ngIf="!loading && filteredData.length > 0">
+        <div class="admin-table-pagination__info">
+            Affichage {{ (currentPage - 1) * pageSize + 1 }} -
+            {{ currentPage * pageSize > filteredData.length ? filteredData.length : currentPage * pageSize }}
+            sur {{ filteredData.length }}
+        </div>
+
+        <div class="admin-table-pagination__page-size">
+            <span>Lignes par page:</span>
+            <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+                <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
+            </select>
+        </div>
+
+        <div class="admin-table-pagination__controls">
+            <button
+                class="admin-table-pagination__btn"
+                [disabled]="currentPage === 1"
+                (click)="goToPage(1)"
+            >
+                <i class="fas fa-angle-double-left"></i>
+            </button>
+            <button
+                class="admin-table-pagination__btn"
+                [disabled]="currentPage === 1"
+                (click)="goToPage(currentPage - 1)"
+            >
+                <i class="fas fa-angle-left"></i>
+            </button>
+
+            <button
+                *ngFor="let page of getVisiblePages()"
+                class="admin-table-pagination__btn"
+                [class.active]="page === currentPage"
+                (click)="goToPage(page)"
+            >
+                {{ page }}
+            </button>
+
+            <button
+                class="admin-table-pagination__btn"
+                [disabled]="currentPage === totalPages"
+                (click)="goToPage(currentPage + 1)"
+            >
+                <i class="fas fa-angle-right"></i>
+            </button>
+            <button
+                class="admin-table-pagination__btn"
+                [disabled]="currentPage === totalPages"
+                (click)="goToPage(totalPages)"
+            >
+                <i class="fas fa-angle-double-right"></i>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+<section class="videos-home" *ngIf="videosList.length > 0">
+    <div class="section-header">
+        <h2>NOS VIDEOS</h2>
+        <p class="section-subtitle">Decouvrez nos actions en images</p>
+    </div>
+
+    <div class="videos-carousel-container">
+        <div class="videos-carousel">
+            <div class="videos-slides" [style.transform]="getTransform()">
+                <div class="video-slide" *ngFor="let video of videosList; let i = index">
+                    <div class="video-slide__thumbnail" (click)="openVideo(video)">
+                        <img [src]="video.thumbnailUrl" [alt]="video.title" loading="lazy" />
+                        <div class="video-slide__overlay"></div>
+                        <div class="video-slide__play">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="video-slide__platform">
+                            <i [class]="video.platform === 'youtube' ? 'fab fa-youtube' : 'fab fa-vimeo-v'"></i>
+                        </div>
+                    </div>
+                    <div class="video-slide__content">
+                        <span class="video-slide__date">
+                            <i class="far fa-calendar-alt"></i>
+                            {{ formatDate(video.date) }}
+                        </span>
+                        <h3 class="video-slide__title">{{ truncate(video.title, 60) }}</h3>
+                        <p class="video-slide__description">{{ truncate(video.description, 100) }}</p>
+                        <button class="video-slide__btn" (click)="openVideo(video)">
+                            <span>Regarder la video</span>
+                            <i class="fas fa-play-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation buttons -->
+            <button class="videos-nav-btn videos-nav-btn--prev" (click)="prevSlide()" aria-label="Precedent" *ngIf="videosList.length > 1">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="videos-nav-btn videos-nav-btn--next" (click)="nextSlide()" aria-label="Suivant" *ngIf="videosList.length > 1">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Dots navigation -->
+        <div class="videos-dots-nav" *ngIf="videosList.length > 1">
+            <button
+                *ngFor="let video of videosList; let i = index"
+                class="videos-dot"
+                [class.videos-dot--active]="i === currentIndex"
+                (click)="goToSlide(i)"
+                [attr.aria-label]="'Aller a la video ' + (i + 1)"
+            >
+                <span class="videos-dot__inner"></span>
+            </button>
+        </div>
+    </div>
+
+    <a class="videos-view-all-link" routerLink="/actualites">
+        <span>Voir toutes les videos</span>
+        <i class="fas fa-long-arrow-alt-right"></i>
+    </a>
+</section>
+
+<!-- Video Modal -->
+<app-video-modal
+    *ngIf="showModal && selectedVideo"
+    [embedUrl]="selectedVideo.embedUrl"
+    [title]="selectedVideo.title"
+    (closed)="closeModal()"
+></app-video-modal>

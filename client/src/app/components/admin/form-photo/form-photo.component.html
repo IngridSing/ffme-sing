@@ -1,0 +1,79 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0, 0, 0, 0.5)" (click)="close()">
+    <div class="modal-dialog modal-lg" role="document" (click)="$event.stopPropagation()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ isEditMode ? 'Modifier' : 'Ajouter' }} des photos</h5>
+                <button type="button" class="btn-close" (click)="close()"></button>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="photoForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" novalidate>
+                    <!-- Image affichée si modification -->
+                    <div *ngIf="isEditMode && photo" class="text-center mb-3">
+                        <img [src]="getImageUrl(photo.image)" class="img-fluid rounded shadow" style="max-height: 70vh" alt="Image complète" />
+                    </div>
+
+                    <!-- Sélecteur d'événement -->
+                    <div class="mb-3">
+                        <label for="eventName" class="form-label">Évènement</label>
+                        <select class="form-select mb-2" (change)="onEventSelect($event)">
+                            <option value="">-- Choisir un évènement existant --</option>
+                            <option *ngFor="let evt of existingEvents" [value]="evt">{{ evt }}</option>
+                        </select>
+
+                        <input
+                            formControlName="eventName"
+                            class="form-control"
+                            id="eventName"
+                            placeholder="Ou entrez un nouvel évènement"
+                            [class.is-invalid]="photoForm.get('eventName')?.invalid && photoForm.get('eventName')?.touched"
+                        />
+                        <small class="text-danger" *ngIf="photoForm.get('eventName')?.invalid && photoForm.get('eventName')?.touched">
+                            L'évènement est requis.
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea
+                            formControlName="description"
+                            class="form-control"
+                            id="description"
+                            [class.is-invalid]="photoForm.get('description')?.invalid && photoForm.get('description')?.touched"
+                        ></textarea>
+                        <small class="text-danger" *ngIf="photoForm.get('description')?.invalid && photoForm.get('description')?.touched">
+                            La description est requise.
+                        </small>
+                    </div>
+
+                    <!-- Upload images si ajout -->
+                    <div class="mb-3" *ngIf="!isEditMode">
+                        <label for="images" class="form-label">Images</label>
+                        <input
+                            type="file"
+                            (change)="onFileSelected($event)"
+                            class="form-control"
+                            id="images"
+                            accept="image/*"
+                            multiple
+                            [class.is-invalid]="imageInvalid"
+                        />
+                        <small class="text-muted" *ngIf="selectedFiles.length > 0">
+                            {{ selectedFiles.length }} image(s) sélectionnée(s)
+                        </small>
+                        <small class="text-danger" *ngIf="imageInvalid"> Veuillez sélectionner au moins une image. </small>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success">Enregistrer</button>
+                    </div>
+
+                    <!-- Bouton Supprimer (uniquement en mode édition) -->
+                    <div class="d-flex justify-content-start mt-3" *ngIf="isEditMode && photo">
+                        <button type="button" class="btn btn-outline-danger" (click)="deleteImage()">Supprimer cette image</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

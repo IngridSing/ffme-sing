@@ -1,0 +1,206 @@
+[
+    {
+        "idOrder": "LIVRE-1",
+        "firstName": "Client1",
+        "lastName": "Test",
+        "phone": "07000001",
+        "email": "client1@mail.com",
+        "isPaid": "Completed",
+        "paymentMethod": "RIB",
+        "date": "2025-10-12",
+        "products": [
+            {
+                "title": "Livre : \u00c9ducation et Patrimoine",
+                "type": "Livre",
+                "description": "Un ouvrage \u00e9ducatif sur les racines culturelles.",
+                "about": "Ce livre rassemble les valeurs de la Fondation.",
+                "image": "assets/book_cover.png",
+                "averageReview": 3.5,
+                "stock": 50,
+                "versions": [
+                    {
+                        "label": "Papier",
+                        "price": 3500
+                    }
+                ],
+                "comments": [
+                    {
+                        "idComment": "dd0b5cc9-e4b0-438f-9811-a6c233bbc833",
+                        "userName": "Alice",
+                        "content": "Tr\u00e8s inspirant.",
+                        "review": 4,
+                        "isChecked": true
+                    },
+                    {
+                        "idComment": "b435fa56-e5b4-4c54-9831-538deac27dc9",
+                        "userName": "Bob",
+                        "content": "Un peu court.",
+                        "review": 3,
+                        "isChecked": false
+                    },
+                    {
+                        "idComment": "645d93c7-4168-4862-857c-ecec7f2adeab",
+                        "userName": "Chlo\u00e9",
+                        "content": "Parfait pour offrir.",
+                        "review": 4,
+                        "isChecked": true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "idOrder": "TSHIRT-1",
+        "firstName": "Acheteur1",
+        "lastName": "Exemple",
+        "phone": "06000001",
+        "email": "achat1@mail.com",
+        "isPaid": "Waiting",
+        "paymentMethod": "SINGPay",
+        "date": "2025-10-13",
+        "products": [
+            {
+                "title": "T-Shirt Fondation",
+                "type": "Textile",
+                "description": "T-shirt blanc logo Fondation",
+                "about": "Disponible en plusieurs tailles.",
+                "image": "https://via.placeholder.com/200x150?text=T-Shirt",
+                "averageReview": 3.2,
+                "stock": 40,
+                "versions": [
+                    {
+                        "label": "S",
+                        "price": 5000
+                    },
+                    {
+                        "label": "M",
+                        "price": 5000
+                    },
+                    {
+                        "label": "L",
+                        "price": 5000
+                    }
+                ],
+                "comments": [
+                    {
+                        "idComment": "183e9f80-73c8-4ae8-ae13-493f809c872a",
+                        "userName": "David",
+                        "content": "Bonne qualit\u00e9.",
+                        "review": 4,
+                        "isChecked": true
+                    },
+                    {
+                        "idComment": "6a7734a3-3119-4e30-8439-02fa92a41719",
+                        "userName": "Emma",
+                        "content": "Livraison rapide.",
+                        "review": 3,
+                        "isChecked": true
+                    },
+                    {
+                        "idComment": "9419f77b-20fa-4dd4-90a4-e4fddf25f68d",
+                        "userName": "Fatou",
+                        "content": "Un peu serr\u00e9.",
+                        "review": 2,
+                        "isChecked": false
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "idOrder": "COMBI-1",
+        "firstName": "Mixte",
+        "lastName": "Client",
+        "phone": "06000002",
+        "email": "combo@mail.com",
+        "isPaid": "Completed",
+        "paymentMethod": "Paiement sur place",
+        "date": "2025-10-14",
+        "products": [
+            {
+                "title": "Livre : \u00c9ducation et Patrimoine",
+                "type": "Livre",
+                "description": "Un ouvrage \u00e9ducatif sur les racines culturelles.",
+                "about": "Ce livre rassemble les valeurs de la Fondation.",
+                "image": "assets/book_cover.png",
+                "averageReview": 3.5,
+                "stock": 50,
+                "versions": [
+                    {
+                        "label": "Papier",
+                        "price": 3500
+                    }
+                ],
+                "comments": [
+                    {
+                        "idComment": "dd0b5cc9-e4b0-438f-9811-a6c233bbc833",
+                        "userName": "Alice",
+                        "content": "Tr\u00e8s inspirant.",
+                        "review": 4,
+                        "isChecked": true
+                    },
+                    {
+                        "idComment": "b435fa56-e5b4-4c54-9831-538deac27dc9",
+                        "userName": "Bob",
+                        "content": "Un peu court.",
+                        "review": 3,
+                        "isChecked": false
+                    },
+                    {
+                        "idComment": "645d93c7-4168-4862-857c-ecec7f2adeab",
+                        "userName": "Chlo\u00e9",
+                        "content": "Parfait pour offrir.",
+                        "review": 4,
+                        "isChecked": true
+                    }
+                ]
+            },
+            {
+                "title": "T-Shirt Fondation",
+                "type": "Textile",
+                "description": "T-shirt blanc logo Fondation",
+                "about": "Disponible en plusieurs tailles.",
+                "image": "https://via.placeholder.com/200x150?text=T-Shirt",
+                "averageReview": 3.2,
+                "stock": 40,
+                "versions": [
+                    {
+                        "label": "S",
+                        "price": 5000
+                    },
+                    {
+                        "label": "M",
+                        "price": 5000
+                    },
+                    {
+                        "label": "L",
+                        "price": 5000
+                    }
+                ],
+                "comments": [
+                    {
+                        "idComment": "183e9f80-73c8-4ae8-ae13-493f809c872a",
+                        "userName": "David",
+                        "content": "Bonne qualit\u00e9.",
+                        "review": 4,
+                        "isChecked": true
+                    },
+                    {
+                        "idComment": "6a7734a3-3119-4e30-8439-02fa92a41719",
+                        "userName": "Emma",
+                        "content": "Livraison rapide.",
+                        "review": 3,
+                        "isChecked": true
+                    },
+                    {
+                        "idComment": "9419f77b-20fa-4dd4-90a4-e4fddf25f68d",
+                        "userName": "Fatou",
+                        "content": "Un peu serr\u00e9.",
+                        "review": 2,
+                        "isChecked": false
+                    }
+                ]
+            }
+        ]
+    }
+]

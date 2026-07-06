@@ -1,0 +1,264 @@
+/* ===== PAGE DON PROFESSIONNELLE ===== */
+
+.don-form-section {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-2xl) var(--space-md);
+    background: var(--gris-clair);
+    min-height: 80vh;
+}
+
+.don-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-xl);
+    max-width: 1000px;
+    width: 100%;
+    font-family: var(--font-primary);
+    background: var(--blanc);
+    padding: var(--space-xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+}
+
+.form-left,
+.form-right {
+    flex: 1 1 45%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+label {
+    font-weight: 600;
+    color: var(--bleu-fonce);
+    font-size: var(--text-base);
+    margin-bottom: var(--space-xs);
+}
+
+/* ===== INPUTS ===== */
+input[type='text'],
+input[type='email'],
+input[type='tel'],
+.select-wrapper select,
+.input-montant {
+    padding: var(--space-sm) var(--space-md);
+    border: 2px solid var(--bleu-clair-clair);
+    border-radius: var(--radius-md);
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    width: 100%;
+    transition: all var(--transition-normal);
+    background-color: var(--blanc);
+
+    &:focus {
+        outline: none;
+        border-color: var(--bleu);
+        box-shadow: 0 0 0 3px rgba(20, 69, 175, 0.1);
+    }
+
+    &::placeholder {
+        color: var(--gris);
+    }
+}
+
+/* ===== SELECT ===== */
+.select-wrapper {
+    position: relative;
+
+    select {
+        appearance: none;
+        cursor: pointer;
+        padding-right: var(--space-xl);
+    }
+
+    .chevron {
+        position: absolute;
+        right: var(--space-md);
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: var(--bleu);
+        font-size: var(--text-sm);
+    }
+}
+
+/* ===== MONTANTS ===== */
+.montants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+.montant {
+    padding: var(--space-sm) var(--space-md);
+    border: 2px solid var(--bleu-clair-clair);
+    border-radius: var(--radius-md);
+    background: var(--blanc);
+    cursor: pointer;
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--bleu);
+    transition: all var(--transition-normal);
+    min-width: 80px;
+    text-align: center;
+
+    &:hover {
+        border-color: var(--bleu);
+        background: var(--bleu-clair-clair);
+    }
+
+    &.selected {
+        background: linear-gradient(135deg, var(--bleu) 0%, var(--bleu-fonce) 100%);
+        color: var(--blanc);
+        border-color: transparent;
+        box-shadow: var(--shadow-sm);
+    }
+}
+
+/* ===== INPUT MONTANT PERSONNALISÉ ===== */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-top: var(--space-sm);
+
+    .input-montant {
+        text-align: right;
+        padding-right: 70px;
+
+        &.selected {
+            border-color: var(--bleu);
+            box-shadow: 0 0 0 3px rgba(20, 69, 175, 0.1);
+        }
+    }
+}
+
+.fcfa-label {
+    position: absolute;
+    right: var(--space-md);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--bleu);
+    pointer-events: none;
+}
+
+/* Supprime les flèches des inputs number */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+/* ===== CHECKBOX ===== */
+.checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    font-size: var(--text-sm);
+    margin-top: var(--space-md);
+    color: var(--gris-texte);
+    line-height: 1.5;
+
+    input[type='checkbox'] {
+        width: 20px;
+        height: 20px;
+        margin-top: 2px;
+        accent-color: var(--bleu);
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    a {
+        color: var(--bleu);
+        text-decoration: underline;
+
+        &:hover {
+            color: var(--bleu-fonce);
+        }
+    }
+}
+
+/* ===== BOUTON SUBMIT ===== */
+.submit-button {
+    margin-top: var(--space-lg);
+    padding: var(--space-md) 0;
+    background: linear-gradient(135deg, var(--bleu) 0%, var(--bleu-fonce) 100%);
+    color: var(--blanc);
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--text-lg);
+    border: none;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    width: 100%;
+
+    &:hover {
+        background: linear-gradient(135deg, var(--bleu-fonce) 0%, #0A1F3C 100%);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    &:disabled {
+        background: var(--gris);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+}
+
+/* ===== ERREURS ===== */
+.error {
+    color: #DC2626;
+    font-size: var(--text-sm);
+    margin-top: var(--space-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.error-text {
+    color: #DC2626;
+    font-weight: 500;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .don-form-section {
+        padding: var(--space-lg) var(--space-sm);
+    }
+
+    .don-form {
+        flex-direction: column;
+        padding: var(--space-lg);
+        gap: var(--space-lg);
+    }
+
+    .form-left,
+    .form-right {
+        flex: 1 1 100%;
+    }
+
+    .montants {
+        flex-wrap: wrap;
+
+        .montant {
+            flex: 1 1 calc(50% - var(--space-xs));
+            min-width: auto;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .montants .montant {
+        flex: 1 1 100%;
+    }
+}

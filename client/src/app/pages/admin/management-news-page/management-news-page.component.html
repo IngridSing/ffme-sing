@@ -1,0 +1,199 @@
+<app-admin-sidebar></app-admin-sidebar>
+<app-loading-spinner [show]="isLoading"></app-loading-spinner>
+
+<div class="admin-content">
+    <!-- Page Header -->
+    <header class="admin-page-header">
+        <div class="admin-page-header__left">
+            <h1 class="admin-page-header__title">Gestion du Contenu</h1>
+            <p class="admin-page-header__subtitle">Gerez vos actualites et videos</p>
+        </div>
+        <div class="admin-page-header__right">
+            <button class="admin-btn admin-btn--primary" *ngIf="activeTab === 'news'" (click)="openNewsForm()">
+                <i class="fas fa-plus"></i>
+                Nouvelle actualite
+            </button>
+            <button class="admin-btn admin-btn--primary" *ngIf="activeTab === 'videos'" (click)="openVideoForm()">
+                <i class="fas fa-plus"></i>
+                Nouvelle video
+            </button>
+        </div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="admin-tabs">
+        <button
+            class="admin-tabs__btn"
+            [class.admin-tabs__btn--active]="activeTab === 'news'"
+            (click)="switchTab('news')"
+        >
+            <i class="fas fa-newspaper"></i>
+            Actualites
+            <span class="admin-tabs__badge">{{ newsList.length }}</span>
+        </button>
+        <button
+            class="admin-tabs__btn"
+            [class.admin-tabs__btn--active]="activeTab === 'videos'"
+            (click)="switchTab('videos')"
+        >
+            <i class="fas fa-video"></i>
+            Videos
+            <span class="admin-tabs__badge">{{ videosList.length }}</span>
+        </button>
+    </div>
+
+    <!-- NEWS TAB CONTENT -->
+    <div *ngIf="activeTab === 'news'">
+        <!-- Stats -->
+        <div class="content-stats">
+            <div class="stat-mini">
+                <div class="stat-mini__icon stat-mini__icon--news">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <div class="stat-mini__content">
+                    <span class="stat-mini__value">{{ newsList.length }}</span>
+                    <span class="stat-mini__label">Actualites</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Grid -->
+        <section class="news-section" *ngIf="newsList.length > 0">
+            <div class="news-grid">
+                <article class="news-card" *ngFor="let news of newsList" (click)="editNews(news)">
+                    <div class="news-card__image">
+                        <img [src]="getImageWithCache(news.image)" [alt]="news.title" loading="lazy" />
+                        <div class="news-card__overlay">
+                            <button class="news-card__action" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="news-card__content">
+                        <div class="news-card__date">
+                            <i class="fas fa-calendar-alt"></i>
+                            {{ news.date | date: 'dd MMMM yyyy' }}
+                        </div>
+                        <h3 class="news-card__title">{{ news.title }}</h3>
+                        <p class="news-card__description">{{ news.description }}</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Empty State News -->
+        <div class="empty-state" *ngIf="newsList.length === 0 && !isLoading">
+            <div class="empty-state__icon">
+                <i class="fas fa-newspaper"></i>
+            </div>
+            <h3 class="empty-state__title">Aucune actualite</h3>
+            <p class="empty-state__text">Commencez par ajouter votre premiere actualite</p>
+            <button class="admin-btn admin-btn--primary" (click)="openNewsForm()">
+                <i class="fas fa-plus"></i>
+                Ajouter une actualite
+            </button>
+        </div>
+    </div>
+
+    <!-- VIDEOS TAB CONTENT -->
+    <div *ngIf="activeTab === 'videos'">
+        <!-- Stats -->
+        <div class="content-stats">
+            <div class="stat-mini">
+                <div class="stat-mini__icon stat-mini__icon--video">
+                    <i class="fas fa-video"></i>
+                </div>
+                <div class="stat-mini__content">
+                    <span class="stat-mini__value">{{ videosList.length }}</span>
+                    <span class="stat-mini__label">Videos</span>
+                </div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-mini__icon stat-mini__icon--active">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="stat-mini__content">
+                    <span class="stat-mini__value">{{ getActiveVideosCount() }}</span>
+                    <span class="stat-mini__label">Actives</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Videos Grid -->
+        <section class="videos-section" *ngIf="videosList.length > 0">
+            <div class="videos-grid">
+                <article
+                    class="video-card"
+                    *ngFor="let video of videosList"
+                    [class.video-card--inactive]="!video.isActive"
+                >
+                    <div class="video-card__thumbnail" (click)="editVideo(video)">
+                        <img [src]="video.thumbnailUrl" [alt]="video.title" loading="lazy" />
+                        <div class="video-card__play">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="video-card__platform">
+                            <i [class]="video.platform === 'youtube' ? 'fab fa-youtube' : 'fab fa-vimeo-v'"></i>
+                        </div>
+                        <div class="video-card__overlay">
+                            <button class="video-card__action" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="video-card__content">
+                        <div class="video-card__header">
+                            <div class="video-card__date">
+                                <i class="fas fa-calendar-alt"></i>
+                                {{ video.date | date: 'dd MMMM yyyy' }}
+                            </div>
+                            <button
+                                class="video-card__toggle"
+                                [class.video-card__toggle--active]="video.isActive"
+                                (click)="toggleVideoActive(video); $event.stopPropagation()"
+                                [title]="video.isActive ? 'Desactiver' : 'Activer'"
+                            >
+                                <i [class]="video.isActive ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+                            </button>
+                        </div>
+                        <h3 class="video-card__title">{{ video.title }}</h3>
+                        <p class="video-card__description">{{ video.description }}</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Empty State Videos -->
+        <div class="empty-state" *ngIf="videosList.length === 0 && !isLoading">
+            <div class="empty-state__icon">
+                <i class="fas fa-video"></i>
+            </div>
+            <h3 class="empty-state__title">Aucune video</h3>
+            <p class="empty-state__text">Commencez par ajouter votre premiere video</p>
+            <button class="admin-btn admin-btn--primary" (click)="openVideoForm()">
+                <i class="fas fa-plus"></i>
+                Ajouter une video
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Form Modal News -->
+<app-form-news
+    *ngIf="showNewsModal"
+    [news]="newsToEdit"
+    [isEditMode]="isNewsEditMode"
+    (submitted)="handleNewsFormSubmit($event)"
+    (deleted)="handleNewsDelete($event)"
+    (closed)="closeNewsForm()"
+></app-form-news>
+
+<!-- Form Modal Video -->
+<app-form-video
+    *ngIf="showVideoModal"
+    [video]="videoToEdit"
+    [isEditMode]="isVideoEditMode"
+    (submitted)="handleVideoFormSubmit($event)"
+    (deleted)="handleVideoDelete($event)"
+    (closed)="closeVideoForm()"
+></app-form-video>

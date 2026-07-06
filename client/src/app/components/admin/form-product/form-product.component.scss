@@ -1,0 +1,41 @@
+/* Le fond gris foncé semi-transparent */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+/* La boîte du formulaire */
+.modal-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    z-index: 1001;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+}
+
+.product-card {
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+    transition: border 0.3s;
+    cursor: pointer;
+}
+.product-card:hover {
+    border-color: #007bff;
+}
+.selected-product-card {
+    border: 2px solid #007bff;
+}

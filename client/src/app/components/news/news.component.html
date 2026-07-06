@@ -1,0 +1,61 @@
+<section class="actualites-home">
+    <div class="section-header">
+        <h2>NOS ACTUALITES</h2>
+        <p class="section-subtitle">Restez informe de nos dernieres actions</p>
+    </div>
+
+    <div class="carousel-container">
+        <div class="carousel">
+            <div class="slides" [style.transform]="getTransform()">
+                <div class="slide" *ngFor="let news of newsList; let i = index">
+                    <div class="slide-image" [style.backgroundImage]="'url(' + getImageUrl(news.image) + ')'">
+                        <div class="slide-overlay"></div>
+                    </div>
+                    <div class="slide-content">
+                        <span class="date-badge">
+                            <i class="far fa-calendar-alt"></i>
+                            {{ formatDate(news.date) }}
+                        </span>
+                        <h3 class="title">{{ truncate(news.title, 80) }}</h3>
+                        <p class="description" *ngIf="news.description">{{ truncate(news.description, 120) }}</p>
+                        <a *ngIf="news.externalLink" [href]="news.externalLink" target="_blank" rel="noopener noreferrer" class="read-article-btn">
+                            <span>Lire l'article</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation buttons -->
+            <button class="nav-btn nav-btn--prev" (click)="prevSlide()" aria-label="Precedent">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn nav-btn--next" (click)="nextSlide()" aria-label="Suivant">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <!-- Progress bar -->
+            <div class="progress-bar">
+                <div class="progress-bar__fill" [style.width]="((currentIndex + 1) / newsList.length * 100) + '%'"></div>
+            </div>
+        </div>
+
+        <!-- Dots navigation -->
+        <div class="dots-nav">
+            <button
+                *ngFor="let news of newsList; let i = index"
+                class="dot"
+                [class.dot--active]="i === currentIndex"
+                (click)="goToSlide(i)"
+                [attr.aria-label]="'Aller a l\'actualite ' + (i + 1)"
+            >
+                <span class="dot__inner"></span>
+            </button>
+        </div>
+    </div>
+
+    <a class="view-all-link" routerLink="/actualites">
+        <span>Voir toutes les actualites</span>
+        <i class="fas fa-long-arrow-alt-right"></i>
+    </a>
+</section>

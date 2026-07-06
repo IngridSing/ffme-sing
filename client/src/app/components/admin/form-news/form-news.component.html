@@ -1,0 +1,96 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0, 0, 0, 0.5)" (click)="close()">
+    <div class="modal-dialog modal-lg" role="document" (click)="$event.stopPropagation()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ isEditMode ? 'Modifier' : 'Ajouter' }} une actualité</h5>
+                <button type="button" class="btn-close" (click)="close()"></button>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="newsForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" novalidate>
+                    <!-- Image affichée si modification -->
+                    <div *ngIf="isEditMode && news" class="text-center mb-3">
+                        <img [src]="getImageUrl(news.image)" class="img-fluid rounded shadow" style="max-height: 60vh" alt="Image actuelle" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input
+                            type="date"
+                            id="date"
+                            class="form-control"
+                            formControlName="date"
+                            [class.is-invalid]="newsForm.get('date')?.invalid && newsForm.get('date')?.touched"
+                        />
+                        <small class="text-danger" *ngIf="newsForm.get('date')?.invalid && newsForm.get('date')?.touched">
+                            La date est requise.
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Titre</label>
+                        <input
+                            type="text"
+                            id="title"
+                            class="form-control"
+                            formControlName="title"
+                            [class.is-invalid]="newsForm.get('title')?.invalid && newsForm.get('title')?.touched"
+                        />
+                        <small class="text-danger" *ngIf="newsForm.get('title')?.invalid && newsForm.get('title')?.touched">
+                            Le titre est requis.
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea
+                            id="description"
+                            class="form-control"
+                            formControlName="description"
+                            rows="4"
+                            [class.is-invalid]="newsForm.get('description')?.invalid && newsForm.get('description')?.touched"
+                        ></textarea>
+                        <small class="text-danger" *ngIf="newsForm.get('description')?.invalid && newsForm.get('description')?.touched">
+                            La description est requise.
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="externalLink" class="form-label">Lien vers l'article (optionnel)</label>
+                        <input
+                            type="url"
+                            id="externalLink"
+                            class="form-control"
+                            formControlName="externalLink"
+                            placeholder="https://exemple.com/article"
+                        />
+                        <small class="text-muted">URL vers un article de presse externe</small>
+                    </div>
+
+                    <!-- Upload image si ajout -->
+                    <div class="mb-3" *ngIf="!isEditMode">
+                        <label for="image" class="form-label">Image</label>
+                        <input
+                            type="file"
+                            (change)="onFileSelected($event)"
+                            class="form-control"
+                            id="image"
+                            accept="image/*"
+                            [class.is-invalid]="imageInvalid"
+                        />
+                        <small class="text-danger" *ngIf="imageInvalid">Veuillez sélectionner une image.</small>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success">Enregistrer</button>
+                    </div>
+
+                    <!-- Bouton Supprimer (uniquement en mode édition) -->
+                    <div class="d-flex justify-content-start mt-3" *ngIf="isEditMode && news">
+                        <button type="button" class="btn btn-outline-danger" (click)="deleteNews()">Supprimer cette actualité</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

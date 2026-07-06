@@ -1,0 +1,220 @@
+// ============================================
+// ADMIN THEME VARIABLES
+// Design: Professionnel & Corporate
+// Palette: Bleu Institutionnel
+// ============================================
+
+// === COULEURS PRIMAIRES ===
+$admin-primary: #1445AF;
+$admin-primary-light: #305CB8;
+$admin-primary-dark: #0D2E5C;
+$admin-primary-rgb: 20, 69, 175;
+
+// === SIDEBAR (Dark Theme) ===
+$sidebar-width: 260px;
+$sidebar-width-collapsed: 72px;
+$sidebar-bg: #1a1f2e;
+$sidebar-bg-secondary: #151923;
+$sidebar-bg-hover: #252b3d;
+$sidebar-bg-active: #2d3548;
+$sidebar-border: rgba(255, 255, 255, 0.08);
+$sidebar-text: #a0aec0;
+$sidebar-text-hover: #e2e8f0;
+$sidebar-text-active: #ffffff;
+$sidebar-accent: $admin-primary;
+
+// === CONTENUS (Light Mode) ===
+$admin-bg: #f1f5f9;
+$admin-bg-secondary: #e2e8f0;
+$admin-surface: #ffffff;
+$admin-surface-hover: #f8fafc;
+
+// === CONTENUS (Dark Mode) ===
+$admin-bg-dark: #0f172a;
+$admin-bg-secondary-dark: #1e293b;
+$admin-surface-dark: #1e293b;
+$admin-surface-hover-dark: #334155;
+
+// === TEXTES (Light Mode) ===
+$admin-text-primary: #1e293b;
+$admin-text-secondary: #64748b;
+$admin-text-muted: #94a3b8;
+
+// === TEXTES (Dark Mode) ===
+$admin-text-primary-dark: #f1f5f9;
+$admin-text-secondary-dark: #cbd5e1;
+$admin-text-muted-dark: #64748b;
+
+// === STATUTS ===
+$status-success: #22c55e;
+$status-success-light: #dcfce7;
+$status-success-dark: #166534;
+
+$status-warning: #f59e0b;
+$status-warning-light: #fef3c7;
+$status-warning-dark: #b45309;
+
+$status-danger: #ef4444;
+$status-danger-light: #fee2e2;
+$status-danger-dark: #b91c1c;
+
+$status-info: #3b82f6;
+$status-info-light: #dbeafe;
+$status-info-dark: #1d4ed8;
+
+$status-neutral: #64748b;
+$status-neutral-light: #f1f5f9;
+$status-neutral-dark: #475569;
+
+// === BORDURES ===
+$admin-border: #e2e8f0;
+$admin-border-dark: #334155;
+$admin-border-radius-sm: 4px;
+$admin-border-radius: 8px;
+$admin-border-radius-lg: 12px;
+$admin-border-radius-xl: 16px;
+
+// === OMBRES ===
+$admin-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+$admin-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+$admin-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$admin-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$admin-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+// === ESPACEMENTS ===
+$admin-spacing-xs: 0.25rem;  // 4px
+$admin-spacing-sm: 0.5rem;   // 8px
+$admin-spacing-md: 1rem;     // 16px
+$admin-spacing-lg: 1.5rem;   // 24px
+$admin-spacing-xl: 2rem;     // 32px
+$admin-spacing-2xl: 3rem;    // 48px
+
+// === TYPOGRAPHIE ===
+$admin-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$admin-font-size-xs: 0.75rem;   // 12px
+$admin-font-size-sm: 0.875rem;  // 14px
+$admin-font-size-base: 1rem;    // 16px
+$admin-font-size-lg: 1.125rem;  // 18px
+$admin-font-size-xl: 1.25rem;   // 20px
+$admin-font-size-2xl: 1.5rem;   // 24px
+$admin-font-size-3xl: 1.875rem; // 30px
+
+$admin-font-weight-normal: 400;
+$admin-font-weight-medium: 500;
+$admin-font-weight-semibold: 600;
+$admin-font-weight-bold: 700;
+
+$admin-line-height-tight: 1.25;
+$admin-line-height-normal: 1.5;
+$admin-line-height-relaxed: 1.75;
+
+// === TRANSITIONS ===
+$admin-transition-fast: 150ms ease;
+$admin-transition-normal: 250ms ease;
+$admin-transition-slow: 350ms ease;
+$admin-ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+$admin-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+// === Z-INDEX ===
+$admin-z-dropdown: 100;
+$admin-z-sticky: 200;
+$admin-z-header: 300;
+$admin-z-sidebar: 400;
+$admin-z-modal-backdrop: 500;
+$admin-z-modal: 600;
+$admin-z-toast: 700;
+$admin-z-tooltip: 800;
+
+// === BREAKPOINTS ===
+$admin-breakpoint-sm: 640px;
+$admin-breakpoint-md: 768px;
+$admin-breakpoint-lg: 1024px;
+$admin-breakpoint-xl: 1280px;
+$admin-breakpoint-2xl: 1536px;
+
+// === MIXINS ===
+@mixin admin-card {
+  background: $admin-surface;
+  border-radius: $admin-border-radius-lg;
+  box-shadow: $admin-shadow-sm;
+  border: 1px solid $admin-border;
+}
+
+@mixin admin-card-dark {
+  background: $admin-surface-dark;
+  border-color: $admin-border-dark;
+}
+
+@mixin admin-transition($properties...) {
+  @if length($properties) == 0 {
+    transition: all $admin-transition-normal $admin-ease-out;
+  } @else {
+    $transitions: ();
+    @each $prop in $properties {
+      $transitions: append($transitions, $prop $admin-transition-normal $admin-ease-out, comma);
+    }
+    transition: $transitions;
+  }
+}
+
+@mixin admin-focus-ring {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba($admin-primary, 0.3);
+}
+
+@mixin admin-text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin admin-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $admin-border;
+    border-radius: 3px;
+    &:hover {
+      background: $admin-text-muted;
+    }
+  }
+}
+
+@mixin admin-scrollbar-dark {
+  &::-webkit-scrollbar-thumb {
+    background: $admin-border-dark;
+    &:hover {
+      background: $admin-text-muted-dark;
+    }
+  }
+}
+
+// === MEDIA QUERIES ===
+@mixin admin-mobile {
+  @media (max-width: #{$admin-breakpoint-md - 1px}) {
+    @content;
+  }
+}
+
+@mixin admin-tablet {
+  @media (min-width: $admin-breakpoint-md) and (max-width: #{$admin-breakpoint-lg - 1px}) {
+    @content;
+  }
+}
+
+@mixin admin-desktop {
+  @media (min-width: $admin-breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin admin-large-desktop {
+  @media (min-width: $admin-breakpoint-xl) {
+    @content;
+  }
+}

@@ -1,0 +1,25 @@
+<app-navbar></app-navbar>
+<app-loading-spinner [show]="isLoading"></app-loading-spinner>
+
+@if (!isLoading) {
+    @if (isSuccess) {
+        <section class="result-page success">
+            <div class="result-content">
+                <div class="icon">&#10004;</div>
+                <h1>Merci pour votre commande !</h1>
+                <p>{{ message }}</p>
+                <p>Vous recevrez un email de confirmation sous peu.</p>
+                <a class="btn" routerLink="/">Retour à l'accueil</a>
+            </div>
+        </section>
+    } @else {
+        <section class="result-page error">
+            <div class="result-content">
+                <div class="icon">&#10008;</div>
+                <h1>Erreur de vérification</h1>
+                <p>{{ message }}</p>
+                <a class="btn" routerLink="/boutique">Retour à la boutique</a>
+            </div>
+        </section>
+    }
+}

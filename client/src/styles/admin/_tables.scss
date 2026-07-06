@@ -1,0 +1,595 @@
+// ============================================
+// ADMIN TABLE STYLES
+// ============================================
+
+@use 'variables' as *;
+
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  // === HEADER ===
+  &__head {
+    background: $admin-bg;
+
+    .dark-mode & {
+      background: $admin-bg-secondary-dark;
+    }
+  }
+
+  &__header-row {
+    th {
+      padding: $admin-spacing-md $admin-spacing-lg;
+      font-size: $admin-font-size-xs;
+      font-weight: $admin-font-weight-semibold;
+      color: $admin-text-secondary;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: left;
+      white-space: nowrap;
+      border-bottom: 1px solid $admin-border;
+      position: sticky;
+      top: 0;
+      background: inherit;
+      z-index: 1;
+
+      .dark-mode & {
+        color: $admin-text-secondary-dark;
+        border-color: $admin-border-dark;
+      }
+
+      &:first-child {
+        border-radius: $admin-border-radius-lg 0 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 $admin-border-radius-lg 0 0;
+      }
+    }
+  }
+
+  // === SORTABLE HEADER ===
+  &__sortable {
+    cursor: pointer;
+    user-select: none;
+    @include admin-transition(color);
+
+    &:hover {
+      color: $admin-primary;
+    }
+
+    &.sorted {
+      color: $admin-primary;
+    }
+  }
+
+  &__sort-icon {
+    display: inline-flex;
+    margin-left: $admin-spacing-xs;
+    opacity: 0.5;
+
+    .sorted & {
+      opacity: 1;
+    }
+
+    &--asc {
+      transform: rotate(180deg);
+    }
+  }
+
+  // === BODY ===
+  &__body {
+    tr {
+      @include admin-transition(background);
+
+      &:hover {
+        background: $admin-surface-hover;
+
+        .dark-mode & {
+          background: $admin-surface-hover-dark;
+        }
+      }
+
+      &.selected {
+        background: rgba($admin-primary, 0.08);
+
+        .dark-mode & {
+          background: rgba($admin-primary, 0.15);
+        }
+      }
+
+      &.clickable {
+        cursor: pointer;
+      }
+    }
+
+    td {
+      padding: $admin-spacing-md $admin-spacing-lg;
+      font-size: $admin-font-size-sm;
+      color: $admin-text-primary;
+      border-bottom: 1px solid $admin-border;
+      vertical-align: middle;
+
+      .dark-mode & {
+        color: $admin-text-primary-dark;
+        border-color: $admin-border-dark;
+      }
+    }
+  }
+
+  // === CHECKBOX COLUMN ===
+  &__checkbox {
+    width: 48px;
+    text-align: center;
+  }
+
+  // === ACTIONS COLUMN ===
+  &__actions {
+    width: 120px;
+    text-align: right;
+  }
+
+  // === EMPTY STATE ===
+  &__empty {
+    text-align: center;
+    padding: $admin-spacing-2xl $admin-spacing-lg;
+
+    td {
+      border-bottom: none;
+    }
+  }
+
+  &__empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto $admin-spacing-md;
+    color: $admin-text-muted;
+
+    .dark-mode & {
+      color: $admin-text-muted-dark;
+    }
+  }
+
+  &__empty-title {
+    font-size: $admin-font-size-lg;
+    font-weight: $admin-font-weight-semibold;
+    color: $admin-text-primary;
+    margin-bottom: $admin-spacing-xs;
+
+    .dark-mode & {
+      color: $admin-text-primary-dark;
+    }
+  }
+
+  &__empty-text {
+    font-size: $admin-font-size-sm;
+    color: $admin-text-secondary;
+
+    .dark-mode & {
+      color: $admin-text-secondary-dark;
+    }
+  }
+}
+
+// === TABLE WRAPPER ===
+.admin-table-wrapper {
+  @include admin-card;
+  overflow: hidden;
+
+  .dark-mode & {
+    @include admin-card-dark;
+  }
+}
+
+// === TABLE TOOLBAR ===
+.admin-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $admin-spacing-md;
+  padding: $admin-spacing-lg;
+  border-bottom: 1px solid $admin-border;
+  flex-wrap: wrap;
+
+  .dark-mode & {
+    border-color: $admin-border-dark;
+  }
+}
+
+.admin-table-toolbar__left {
+  display: flex;
+  align-items: center;
+  gap: $admin-spacing-md;
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-table-toolbar__right {
+  display: flex;
+  align-items: center;
+  gap: $admin-spacing-sm;
+}
+
+.admin-table-toolbar__title {
+  font-size: $admin-font-size-lg;
+  font-weight: $admin-font-weight-semibold;
+  color: $admin-text-primary;
+
+  .dark-mode & {
+    color: $admin-text-primary-dark;
+  }
+}
+
+.admin-table-toolbar__count {
+  font-size: $admin-font-size-sm;
+  color: $admin-text-secondary;
+  background: $admin-bg;
+  padding: $admin-spacing-xs $admin-spacing-sm;
+  border-radius: $admin-border-radius-sm;
+
+  .dark-mode & {
+    color: $admin-text-secondary-dark;
+    background: $admin-bg-secondary-dark;
+  }
+}
+
+// === SEARCH INPUT ===
+.admin-table-search {
+  position: relative;
+  width: 280px;
+
+  &__icon {
+    position: absolute;
+    left: $admin-spacing-md;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: $admin-text-muted;
+    pointer-events: none;
+  }
+
+  &__input {
+    width: 100%;
+    padding: $admin-spacing-sm $admin-spacing-md $admin-spacing-sm calc(#{$admin-spacing-md} + 26px);
+    font-size: $admin-font-size-sm;
+    border: 1px solid $admin-border;
+    border-radius: $admin-border-radius;
+    background: $admin-surface;
+    color: $admin-text-primary;
+    @include admin-transition(border-color, box-shadow);
+
+    &::placeholder {
+      color: $admin-text-muted;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $admin-primary;
+      @include admin-focus-ring;
+    }
+
+    .dark-mode & {
+      background: $admin-surface-dark;
+      border-color: $admin-border-dark;
+      color: $admin-text-primary-dark;
+
+      &::placeholder {
+        color: $admin-text-muted-dark;
+      }
+    }
+  }
+
+  &__clear {
+    position: absolute;
+    right: $admin-spacing-sm;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $admin-text-muted;
+    cursor: pointer;
+    border-radius: 50%;
+    @include admin-transition(background, color);
+
+    &:hover {
+      background: $admin-bg;
+      color: $admin-text-primary;
+    }
+
+    .dark-mode &:hover {
+      background: $admin-bg-secondary-dark;
+      color: $admin-text-primary-dark;
+    }
+  }
+}
+
+// === PAGINATION ===
+.admin-table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $admin-spacing-md $admin-spacing-lg;
+  border-top: 1px solid $admin-border;
+  flex-wrap: wrap;
+  gap: $admin-spacing-md;
+
+  .dark-mode & {
+    border-color: $admin-border-dark;
+  }
+}
+
+.admin-table-pagination__info {
+  font-size: $admin-font-size-sm;
+  color: $admin-text-secondary;
+
+  .dark-mode & {
+    color: $admin-text-secondary-dark;
+  }
+}
+
+.admin-table-pagination__controls {
+  display: flex;
+  align-items: center;
+  gap: $admin-spacing-xs;
+}
+
+.admin-table-pagination__btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $admin-border;
+  border-radius: $admin-border-radius;
+  background: $admin-surface;
+  color: $admin-text-primary;
+  cursor: pointer;
+  @include admin-transition(background, border-color, color);
+
+  &:hover:not(:disabled) {
+    background: $admin-bg;
+    border-color: $admin-primary;
+    color: $admin-primary;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &.active {
+    background: $admin-primary;
+    border-color: $admin-primary;
+    color: white;
+  }
+
+  .dark-mode & {
+    background: $admin-surface-dark;
+    border-color: $admin-border-dark;
+    color: $admin-text-primary-dark;
+
+    &:hover:not(:disabled) {
+      background: $admin-bg-secondary-dark;
+    }
+
+    &.active {
+      background: $admin-primary;
+      border-color: $admin-primary;
+      color: white;
+    }
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.admin-table-pagination__page-size {
+  display: flex;
+  align-items: center;
+  gap: $admin-spacing-sm;
+  font-size: $admin-font-size-sm;
+  color: $admin-text-secondary;
+
+  select {
+    padding: $admin-spacing-xs $admin-spacing-sm;
+    border: 1px solid $admin-border;
+    border-radius: $admin-border-radius-sm;
+    background: $admin-surface;
+    color: $admin-text-primary;
+    font-size: $admin-font-size-sm;
+    cursor: pointer;
+
+    .dark-mode & {
+      background: $admin-surface-dark;
+      border-color: $admin-border-dark;
+      color: $admin-text-primary-dark;
+    }
+  }
+
+  .dark-mode & {
+    color: $admin-text-secondary-dark;
+  }
+}
+
+// === RESPONSIVE TABLE ===
+.admin-table-responsive {
+  overflow-x: auto;
+  @include admin-scrollbar;
+
+  .dark-mode & {
+    @include admin-scrollbar-dark;
+  }
+}
+
+// === LOADING STATE ===
+.admin-table-loading {
+  position: relative;
+  min-height: 200px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba($admin-surface, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+
+    .dark-mode & {
+      background: rgba($admin-surface-dark, 0.8);
+    }
+  }
+}
+
+// === MOBILE RESPONSIVE ===
+@include admin-mobile {
+  // Search full width
+  .admin-table-search {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  // Toolbar stacked
+  .admin-table-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: $admin-spacing-sm;
+    padding: $admin-spacing-md;
+  }
+
+  .admin-table-toolbar__left,
+  .admin-table-toolbar__right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .admin-table-toolbar__right {
+    flex-wrap: wrap;
+    gap: $admin-spacing-xs;
+  }
+
+  // Pagination mobile
+  .admin-table-pagination {
+    flex-direction: column;
+    align-items: center;
+    gap: $admin-spacing-sm;
+    padding: $admin-spacing-md;
+  }
+
+  .admin-table-pagination__info {
+    order: 2;
+    text-align: center;
+  }
+
+  .admin-table-pagination__controls {
+    order: 1;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .admin-table-pagination__page-size {
+    order: 3;
+  }
+
+  // Touch-friendly pagination buttons
+  .admin-table-pagination__btn {
+    width: 44px;
+    height: 44px;
+    font-size: $admin-font-size-base;
+  }
+
+  // Table card layout for mobile
+  .admin-table-responsive {
+    .admin-table {
+      display: block;
+    }
+
+    .admin-table__head {
+      display: none;
+    }
+
+    .admin-table__body {
+      display: block;
+    }
+
+    .admin-table__body tr {
+      display: block;
+      margin-bottom: $admin-spacing-md;
+      border: 1px solid $admin-border;
+      border-radius: $admin-border-radius;
+      padding: $admin-spacing-md;
+      background: $admin-surface;
+
+      .dark-mode & {
+        border-color: $admin-border-dark;
+        background: $admin-surface-dark;
+      }
+
+      &:hover {
+        background: $admin-surface;
+
+        .dark-mode & {
+          background: $admin-surface-dark;
+        }
+      }
+    }
+
+    .admin-table__body td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: $admin-spacing-sm 0;
+      border: none;
+      border-bottom: 1px solid $admin-border;
+
+      .dark-mode & {
+        border-color: $admin-border-dark;
+      }
+
+      &:last-child {
+        border-bottom: none;
+        padding-top: $admin-spacing-md;
+        justify-content: flex-end;
+      }
+
+      &::before {
+        content: attr(data-label);
+        font-weight: $admin-font-weight-semibold;
+        font-size: $admin-font-size-xs;
+        color: $admin-text-muted;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        flex-shrink: 0;
+        margin-right: $admin-spacing-md;
+
+        .dark-mode & {
+          color: $admin-text-muted-dark;
+        }
+      }
+    }
+
+    // Hide checkbox column on mobile
+    .admin-table__checkbox {
+      display: none;
+    }
+  }
+}
+
+// === TABLET RESPONSIVE ===
+@include admin-tablet {
+  .admin-table-search {
+    width: 220px;
+  }
+
+  .admin-table-toolbar {
+    padding: $admin-spacing-md;
+  }
+}

@@ -1,0 +1,32 @@
+<div class="stat-card" [class]="'stat-card--' + variant" [class.stat-card--loading]="loading">
+    <!-- Icon -->
+    <div class="stat-card__icon" *ngIf="icon && !loading">
+        <i [class]="icon"></i>
+    </div>
+    <div class="stat-card__icon stat-card__skeleton" *ngIf="loading"></div>
+
+    <!-- Content -->
+    <div class="stat-card__content">
+        <span class="stat-card__title" *ngIf="!loading">{{ title }}</span>
+        <div class="stat-card__title stat-card__skeleton stat-card__skeleton--sm" *ngIf="loading"></div>
+
+        <span class="stat-card__value" *ngIf="!loading">{{ value }}</span>
+        <div class="stat-card__value stat-card__skeleton stat-card__skeleton--lg" *ngIf="loading"></div>
+
+        <!-- Subtitle ou Trend -->
+        <div class="stat-card__footer" *ngIf="(subtitle || trend !== undefined) && !loading">
+            <span class="stat-card__subtitle" *ngIf="subtitle">{{ subtitle }}</span>
+            <span
+                class="stat-card__trend"
+                *ngIf="trend !== undefined"
+                [class.stat-card__trend--up]="trend > 0"
+                [class.stat-card__trend--down]="trend < 0"
+            >
+                <i [class]="trend >= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
+                {{ trend > 0 ? '+' : '' }}{{ trend }}%
+                <span class="stat-card__trend-label" *ngIf="trendLabel">{{ trendLabel }}</span>
+            </span>
+        </div>
+        <div class="stat-card__footer stat-card__skeleton stat-card__skeleton--xs" *ngIf="loading"></div>
+    </div>
+</div>

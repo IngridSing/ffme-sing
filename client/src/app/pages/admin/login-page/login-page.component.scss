@@ -1,0 +1,364 @@
+@use '../../../../styles/admin/variables' as *;
+
+.login-page {
+    display: flex;
+    min-height: 100vh;
+    background: $admin-bg;
+
+    @include admin-mobile {
+        flex-direction: column;
+    }
+}
+
+// === LEFT PANEL - BRANDING ===
+.login-branding {
+    flex: 1;
+    background: linear-gradient(135deg, $admin-primary-dark 0%, $admin-primary 50%, $admin-primary-light 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: $admin-spacing-2xl;
+    position: relative;
+    overflow: hidden;
+
+    // Decorative elements
+    &::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+        animation: pulse 15s ease-in-out infinite;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        right: -30%;
+        width: 60%;
+        height: 60%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+    }
+
+    @include admin-mobile {
+        flex: none;
+        min-height: auto;
+        padding: $admin-spacing-xl $admin-spacing-md;
+
+        // Hide decorative elements on mobile
+        &::before,
+        &::after {
+            display: none;
+        }
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.branding-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+}
+
+.branding-logo {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto $admin-spacing-xl;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+
+    @include admin-mobile {
+        width: 80px;
+        height: 80px;
+        margin-bottom: $admin-spacing-md;
+    }
+
+    img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+
+        @include admin-mobile {
+            width: 50px;
+            height: 50px;
+        }
+    }
+}
+
+.branding-title {
+    font-size: $admin-font-size-3xl;
+    font-weight: $admin-font-weight-bold;
+    margin-bottom: $admin-spacing-sm;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+    @include admin-mobile {
+        font-size: $admin-font-size-xl;
+        margin-bottom: $admin-spacing-xs;
+    }
+}
+
+.branding-subtitle {
+    font-size: $admin-font-size-lg;
+    opacity: 0.9;
+    margin-bottom: $admin-spacing-2xl;
+
+    @include admin-mobile {
+        font-size: $admin-font-size-sm;
+        margin-bottom: 0;
+    }
+}
+
+.branding-features {
+    display: flex;
+    flex-direction: column;
+    gap: $admin-spacing-md;
+    margin-top: $admin-spacing-xl;
+
+    @include admin-mobile {
+        display: none;
+    }
+
+    .feature {
+        display: flex;
+        align-items: center;
+        gap: $admin-spacing-md;
+        padding: $admin-spacing-md $admin-spacing-lg;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: $admin-border-radius-lg;
+        backdrop-filter: blur(10px);
+
+        i {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        span {
+            font-size: $admin-font-size-sm;
+        }
+    }
+}
+
+.branding-footer {
+    position: absolute;
+    bottom: $admin-spacing-xl;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: $admin-font-size-sm;
+
+    @include admin-mobile {
+        display: none;
+    }
+}
+
+// === RIGHT PANEL - FORM ===
+.login-form-panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $admin-spacing-xl;
+    background: white;
+
+    @include admin-mobile {
+        min-height: 100vh;
+    }
+}
+
+.login-form-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: $admin-spacing-xl;
+}
+
+.login-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto $admin-spacing-lg;
+    background: linear-gradient(135deg, $admin-primary 0%, $admin-primary-light 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    box-shadow: 0 8px 20px rgba($admin-primary, 0.3);
+
+    @include admin-mobile {
+        width: 80px;
+        height: 80px;
+        font-size: 28px;
+    }
+}
+
+.login-header h2 {
+    font-size: $admin-font-size-2xl;
+    font-weight: $admin-font-weight-bold;
+    color: $admin-text-primary;
+    margin-bottom: $admin-spacing-xs;
+}
+
+.login-header p {
+    font-size: $admin-font-size-sm;
+    color: $admin-text-secondary;
+}
+
+// === FORM ===
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: $admin-spacing-lg;
+}
+
+.alert-error {
+    display: flex;
+    align-items: center;
+    gap: $admin-spacing-sm;
+    padding: $admin-spacing-md;
+    background: $status-danger-light;
+    border: 1px solid $status-danger;
+    border-radius: $admin-border-radius;
+    color: $status-danger-dark;
+    font-size: $admin-font-size-sm;
+
+    i {
+        font-size: 16px;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: $admin-spacing-xs;
+
+    label {
+        display: flex;
+        align-items: center;
+        gap: $admin-spacing-sm;
+        font-size: $admin-font-size-sm;
+        font-weight: $admin-font-weight-medium;
+        color: $admin-text-primary;
+
+        i {
+            color: $admin-text-muted;
+            font-size: 14px;
+        }
+    }
+
+    input {
+        width: 100%;
+        padding: $admin-spacing-md;
+        font-size: $admin-font-size-base;
+        border: 1px solid $admin-border;
+        border-radius: $admin-border-radius;
+        background: $admin-surface;
+        color: $admin-text-primary;
+        @include admin-transition(border-color, box-shadow);
+
+        &::placeholder {
+            color: $admin-text-muted;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: $admin-primary;
+            box-shadow: 0 0 0 3px rgba($admin-primary, 0.15);
+        }
+
+        &.invalid {
+            border-color: $status-danger;
+
+            &:focus {
+                box-shadow: 0 0 0 3px rgba($status-danger, 0.15);
+            }
+        }
+    }
+}
+
+.field-error {
+    font-size: $admin-font-size-xs;
+    color: $status-danger;
+    display: flex;
+    align-items: center;
+    gap: $admin-spacing-xs;
+}
+
+.btn-login {
+    width: 100%;
+    padding: $admin-spacing-md $admin-spacing-lg;
+    font-size: $admin-font-size-base;
+    font-weight: $admin-font-weight-semibold;
+    color: white;
+    background: linear-gradient(135deg, $admin-primary 0%, $admin-primary-light 100%);
+    border: none;
+    border-radius: $admin-border-radius;
+    cursor: pointer;
+    @include admin-transition(transform, box-shadow, opacity);
+
+    &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba($admin-primary, 0.4);
+    }
+
+    &:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .btn-content,
+    .btn-loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: $admin-spacing-sm;
+    }
+
+    i {
+        font-size: 16px;
+    }
+}
+
+.login-footer {
+    margin-top: $admin-spacing-xl;
+    text-align: center;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: $admin-spacing-sm;
+    color: $admin-text-secondary;
+    font-size: $admin-font-size-sm;
+    text-decoration: none;
+    @include admin-transition(color);
+
+    &:hover {
+        color: $admin-primary;
+    }
+
+    i {
+        font-size: 12px;
+    }
+}

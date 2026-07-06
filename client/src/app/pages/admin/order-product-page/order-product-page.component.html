@@ -1,0 +1,88 @@
+<app-admin-sidebar></app-admin-sidebar>
+<app-loading-spinner [show]="isLoading" />
+
+<div class="with-sidebar">
+    <div class="p-4">
+        <h2>Détail de la commande</h2>
+
+        <div *ngIf="order; else notFound" class="row mt-4">
+            <!-- Colonne gauche : infos commande -->
+            <div class="col-md-8">
+                <div class="border rounded p-4 bg-white">
+                    <p><strong>Commande ID :</strong> {{ order.idOrder }}</p>
+                    <p><strong>Date :</strong> {{ order.date | date:'dd/MM/yyyy à HH:mm' }}</p>
+                    <p><strong>Nom :</strong> {{ order.firstName }} {{ order.lastName }}</p>
+                    <p><strong>Email :</strong> {{ order.email }}</p>
+                    <p><strong>Téléphone :</strong> {{ order.phone }}</p>
+                    <p>
+                        <strong>Statut :</strong>
+                        <select class="form-select d-inline w-auto" [(ngModel)]="order.isPaid" (change)="onStatusChange(order.isPaid)" [disabled]="isUpdating">
+                            <option *ngFor="let s of statuses" [value]="s.value">{{ s.label }}</option>
+                        </select>
+                        <span *ngIf="isUpdating" class="ms-2 text-muted"><i class="fas fa-spinner fa-spin"></i></span>
+                    </p>
+                    <p><strong>Moyen de paiement :</strong> {{ getMethodLabel(order.paymentMethod) }}</p>
+                    <p *ngIf="order.totalAmount"><strong>Montant total :</strong> <span class="text-success fw-bold">{{ order.totalAmount | number }} FCFA</span></p>
+
+                    <a routerLink="/admin/produits" class="btn btn-outline-primary mt-3">← Retour aux commandes</a>
+                </div>
+            </div>
+
+            <!-- Colonne droite : articles commandés -->
+            <div class="col-md-4">
+                <!-- Détail des articles avec prix -->
+                <div class="border rounded p-3 bg-white mb-3" *ngIf="order.items?.length">
+                    <h5><i class="fas fa-receipt me-2"></i>Détail de la commande</h5>
+                    <ul class="list-group list-group-flush">
+                        <li *ngFor="let item of order.items" class="list-group-item px-0">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>{{ item.title }}</strong>
+                                    <br>
+                                    <small class="text-muted">{{ item.versionLabel }} • {{ item.type }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-primary">x{{ item.quantity }}</span>
+                                    <br>
+                                    <small class="text-muted">{{ item.price | number }} F/unité</small>
+                                </div>
+                            </div>
+                            <div class="text-end mt-1">
+                                <strong>{{ item.price * item.quantity | number }} FCFA</strong>
+                            </div>
+                        </li>
+                    </ul>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <strong>Total</strong>
+                        <strong class="text-success">{{ order.totalAmount | number }} FCFA</strong>
+                    </div>
+                </div>
+
+                <!-- Produits (ancienne vue pour compatibilité) -->
+                <div class="border rounded p-3 bg-light" *ngIf="order.products?.length && !order.items?.length">
+                    <h5>Produits commandés</h5>
+                    <ul class="list-group">
+                        <li *ngFor="let p of order.products" class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <span *ngIf="getOrderCountForProduct(p) > 0" class="text-muted small me-1">
+                                    ({{ getOrderCountForProduct(p) }}x)
+                                </span>
+                                {{ p.title }}
+                            </div>
+                            <small class="text-muted">{{ p.type }}</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #notFound>
+            <div class="alert alert-warning mt-4">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Commande introuvable.
+                <a routerLink="/admin/produits" class="alert-link">Retour aux commandes</a>
+            </div>
+        </ng-template>
+    </div>
+</div>

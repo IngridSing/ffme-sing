@@ -1,0 +1,46 @@
+# Build stage
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+RUN npm install -g pnpm
+
+COPY common ./common
+COPY server/package.json server/pnpm-lock.yaml ./server/
+
+WORKDIR /app/server
+RUN pnpm install --frozen-lockfile \
+    && pnpm rebuild bcrypt sharp
+
+WORKDIR /app
+COPY server ./server
+
+WORKDIR /app/server
+RUN pnpm run build
+
+# Dependencies stage
+FROM node:20-alpine AS deps
+
+WORKDIR /app
+RUN npm install -g pnpm
+
+COPY server/package.json server/pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod
+RUN mkdir -p uploads assets
+
+# Production stage (distroless)
+FROM gcr.io/distroless/nodejs20-debian12
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/package.json ./package.json
+COPY --from=builder /app/server/out ./out
+COPY --from=deps /app/uploads ./uploads
+COPY --from=deps /app/assets ./assets
+
+EXPOSE 3000
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV UPLOADS_DIR=/app/uploads
+
+CMD ["out/server/app/index.js"]

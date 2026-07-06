@@ -1,0 +1,81 @@
+<app-navbar></app-navbar>
+<app-loading-spinner [show]="isLoading"></app-loading-spinner>
+
+@if (messageErreur.includes('Erreur') || messageErreur.includes('erreur') || messageErreur.includes('échec')) {
+<section class="result-page error">
+    <div class="result-content">
+        <div class="icon">✖</div>
+        <h1>Échec de la commande</h1>
+        <p>{{ messageErreur }}</p>
+        <a class="btn" routerLink="/">Retour à l'accueil</a>
+    </div>
+</section>
+} @else if (messageErreur) {
+<section class="result-page success">
+    <div class="result-content">
+        <div class="icon">✔</div>
+        <h1>Commande confirmée</h1>
+        <p>{{ messageErreur }}</p>
+        <a class="btn" routerLink="/">Retour à l'accueil</a>
+    </div>
+</section>
+} @else {
+
+<app-title titre="CONFIRMER VOTRE COMMANDE"></app-title>
+
+<section class="don-form-section">
+    <form class="don-form" [formGroup]="formCommande" (ngSubmit)="onSubmit()">
+        <div class="form-left">
+            <label for="prenom">Prénom :</label>
+            <input type="text" id="prenom" formControlName="prenom" maxlength="30" />
+            <div *ngIf="formCommande.get('prenom')?.touched && formCommande.get('prenom')?.invalid" class="error">Prénom requis</div>
+
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" formControlName="nom" maxlength="30" />
+            <div *ngIf="formCommande.get('nom')?.touched && formCommande.get('nom')?.invalid" class="error">Nom requis</div>
+
+            <label for="numero">Numéro :</label>
+            <input type="tel" id="numero" formControlName="numero" maxlength="25" />
+            <div *ngIf="formCommande.get('numero')?.touched && formCommande.get('numero')?.errors as errors" class="error">
+                <div *ngIf="errors['required']">Numéro requis</div>
+                <div *ngIf="errors['pattern']">Numéro invalide</div>
+            </div>
+
+            <label for="email">Adresse Mail :</label>
+            <input type="email" id="email" formControlName="email" maxlength="50" />
+            <div *ngIf="formCommande.get('email')?.touched && formCommande.get('email')?.errors as errors" class="error">
+                <div *ngIf="errors['required']">Adresse email requise</div>
+                <div *ngIf="errors['email']">Format d'adresse email invalide</div>
+            </div>
+        </div>
+
+        <div class="form-right">
+            <label>Paiement avec <strong>SING Pay</strong></label>
+
+            <p class="description">
+                Faîtes votre achat directement via SING Pay, le portefeuille électronique sécurisé de la SING.<br />
+                Disponible 24h/24, paiement instantané.
+            </p>
+
+            <p class="montant">
+                Montant du produit : <strong>{{ montant | number }} XAF</strong>
+            </p>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="consentement" formControlName="consentement" />
+                <label
+                    for="consentement"
+                    [ngClass]="{
+                        'error-text': formCommande.get('consentement')?.touched && formCommande.get('consentement')?.invalid
+                    }"
+                >
+                    J'autorise la transmission de mes informations personnelles.
+                </label>
+            </div>
+
+            <button type="submit" class="submit-button wide-button">EFFECTUER LE PAIEMENT</button>
+        </div>
+    </form>
+</section>
+}
+<app-footer></app-footer>

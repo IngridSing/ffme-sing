@@ -1,0 +1,184 @@
+<app-admin-sidebar></app-admin-sidebar>
+
+<div class="admin-content">
+    <!-- Error Message -->
+    <div class="alert-error" *ngIf="errorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>{{ errorMessage }}</span>
+    </div>
+
+    <ng-container *ngIf="member as m; else loading">
+        <!-- Header -->
+        <header class="detail-header">
+            <a routerLink="/admin/membres" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Retour aux membres
+            </a>
+            <div class="detail-header__content">
+                <h1 class="detail-title">{{ m.firstName }} {{ m.lastName }}</h1>
+                <div class="detail-badges">
+                    <span class="status-badge" [ngClass]="{
+                        'status-badge--success': m.paymentStatus === PaymentStatus.COMPLETED,
+                        'status-badge--warning': m.paymentStatus === PaymentStatus.PENDING,
+                        'status-badge--danger': m.paymentStatus === PaymentStatus.FAILURE
+                    }">
+                        <i [class]="m.paymentStatus === PaymentStatus.COMPLETED ? 'fas fa-check' : m.paymentStatus === PaymentStatus.PENDING ? 'fas fa-clock' : 'fas fa-times'"></i>
+                        {{ m.paymentStatus === PaymentStatus.COMPLETED ? 'Paye' : m.paymentStatus === PaymentStatus.PENDING ? 'En attente' : 'Echoue' }}
+                    </span>
+                    <span class="certified-badge" [ngClass]="m.isValidated ? 'certified-badge--active' : 'certified-badge--inactive'">
+                        <i [class]="m.isValidated ? 'fas fa-certificate' : 'fas fa-times-circle'"></i>
+                        {{ m.isValidated ? 'Certifie' : 'Non certifie' }}
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <div class="detail-grid">
+            <!-- Main Info Card -->
+            <div class="detail-card">
+                <div class="detail-card__header">
+                    <div class="detail-card__icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h2 class="detail-card__title">Informations personnelles</h2>
+                </div>
+                <div class="detail-card__body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">
+                                <i class="fas fa-user"></i>
+                                Nom complet
+                            </span>
+                            <span class="info-value">{{ m.firstName }} {{ m.lastName }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </span>
+                            <span class="info-value">{{ m.email }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">
+                                <i class="fas fa-phone"></i>
+                                Telephone
+                            </span>
+                            <span class="info-value">{{ m.phone || 'Non renseigne' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">
+                                <i class="fas fa-credit-card"></i>
+                                Moyen de paiement
+                            </span>
+                            <span class="info-value info-value--highlight">{{ m.paymentMethod }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Amount & Validation Card -->
+            <div class="detail-card detail-card--amount">
+                <div class="amount-display">
+                    <span class="amount-label">Montant paye</span>
+                    <span class="amount-value">{{ m.amount | number }} FCFA</span>
+                </div>
+            </div>
+
+            <!-- Status Card -->
+            <div class="detail-card">
+                <h3 class="detail-card__section-title">Statut du paiement</h3>
+                <div class="status-selector">
+                    <label class="status-option" *ngFor="let s of statuses">
+                        <input
+                            type="radio"
+                            name="status"
+                            [value]="s.value"
+                            [(ngModel)]="m.paymentStatus"
+                            (change)="onStatusChange(m.paymentStatus)"
+                        />
+                        <span class="status-option__box" [ngClass]="'status-option__box--' + s.value">
+                            <i [class]="s.value === PaymentStatus.COMPLETED ? 'fas fa-check' : s.value === PaymentStatus.PENDING ? 'fas fa-clock' : 'fas fa-times'"></i>
+                            {{ s.label }}
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Validation Card -->
+            <div class="detail-card">
+                <h3 class="detail-card__section-title">Certification</h3>
+                <div class="validation-toggle">
+                    <div class="validation-status">
+                        <i [class]="m.isValidated ? 'fas fa-certificate' : 'fas fa-times-circle'"
+                           [ngClass]="m.isValidated ? 'text-success' : 'text-muted'"></i>
+                        <span>{{ m.isValidated ? 'Adhesion certifiee' : 'Adhesion non certifiee' }}</span>
+                    </div>
+                    <button
+                        class="btn-validate"
+                        [ngClass]="m.isValidated ? 'btn-validate--danger' : 'btn-validate--success'"
+                        (click)="onValidateToggle()"
+                    >
+                        <i [class]="m.isValidated ? 'fas fa-times' : 'fas fa-check'"></i>
+                        {{ m.isValidated ? 'Retirer la certification' : 'Certifier l\'adhesion' }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Documents Card -->
+            <div class="detail-card detail-card--full">
+                <div class="detail-card__header">
+                    <div class="detail-card__icon detail-card__icon--info">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h2 class="detail-card__title">Documents</h2>
+                    <span class="documents-count">{{ m.documents?.length || 0 }} document(s)</span>
+                </div>
+                <div class="detail-card__body">
+                    <div class="documents-grid" *ngIf="m.documents?.length; else noDocuments">
+                        <div class="document-card" *ngFor="let doc of m.documents" (click)="previewBase64(doc.base64, doc.filename)">
+                            <div class="document-card__icon">
+                                <i [class]="getDocumentIconClass(doc.filename)"></i>
+                            </div>
+                            <div class="document-card__info">
+                                <span class="document-card__title">{{ formatTitle(doc.title || '') }}</span>
+                                <span class="document-card__filename">
+                                    {{ doc.filename.length > 25 ? (doc.filename | slice: 0 : 22) + '...' : doc.filename }}
+                                </span>
+                            </div>
+                            <div class="document-card__action">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #noDocuments>
+                        <div class="no-documents">
+                            <i class="fas fa-folder-open"></i>
+                            <span>Aucun document</span>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="preview-section" *ngIf="previewUrl">
+            <div class="preview-header">
+                <h3>
+                    <i class="fas fa-eye"></i>
+                    Apercu : {{ previewFilename }}
+                </h3>
+                <button class="btn-close-preview" (click)="previewUrl = null">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <iframe [src]="previewUrl | safeUrl" class="preview-frame"></iframe>
+        </div>
+    </ng-container>
+
+    <ng-template #loading>
+        <div class="loading-state">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>Chargement des donnees...</span>
+        </div>
+    </ng-template>
+</div>

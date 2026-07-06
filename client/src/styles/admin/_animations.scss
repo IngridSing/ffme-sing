@@ -1,0 +1,395 @@
+// ============================================
+// ADMIN ANIMATIONS
+// ============================================
+
+@use 'variables' as *;
+
+// === KEYFRAMES ===
+
+@keyframes admin-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes admin-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes admin-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes admin-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes admin-slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes admin-slide-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes admin-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes admin-scale-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes admin-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes admin-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes admin-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes admin-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes admin-skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+@keyframes admin-progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+// === ANIMATION CLASSES ===
+
+.admin-animate-fade-in {
+  animation: admin-fade-in $admin-transition-normal $admin-ease-out forwards;
+}
+
+.admin-animate-fade-out {
+  animation: admin-fade-out $admin-transition-normal $admin-ease-out forwards;
+}
+
+.admin-animate-slide-in-left {
+  animation: admin-slide-in-left $admin-transition-normal $admin-ease-out forwards;
+}
+
+.admin-animate-slide-in-right {
+  animation: admin-slide-in-right $admin-transition-normal $admin-ease-out forwards;
+}
+
+.admin-animate-slide-in-up {
+  animation: admin-slide-in-up $admin-transition-normal $admin-ease-out forwards;
+}
+
+.admin-animate-slide-in-down {
+  animation: admin-slide-in-down $admin-transition-normal $admin-ease-out forwards;
+}
+
+.admin-animate-scale-in {
+  animation: admin-scale-in $admin-transition-normal $admin-ease-out forwards;
+}
+
+.admin-animate-scale-out {
+  animation: admin-scale-out $admin-transition-normal $admin-ease-out forwards;
+}
+
+.admin-animate-spin {
+  animation: admin-spin 1s linear infinite;
+}
+
+.admin-animate-pulse {
+  animation: admin-pulse 2s ease-in-out infinite;
+}
+
+.admin-animate-bounce {
+  animation: admin-bounce 1s ease-in-out infinite;
+}
+
+.admin-animate-shake {
+  animation: admin-shake 0.5s ease-in-out;
+}
+
+// === SKELETON LOADING ===
+
+.admin-skeleton {
+  background: linear-gradient(
+    90deg,
+    $admin-border 0px,
+    lighten($admin-border, 5%) 40px,
+    $admin-border 80px
+  );
+  background-size: 200px 100%;
+  animation: admin-skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: $admin-border-radius-sm;
+
+  .dark-mode & {
+    background: linear-gradient(
+      90deg,
+      $admin-border-dark 0px,
+      lighten($admin-border-dark, 5%) 40px,
+      $admin-border-dark 80px
+    );
+  }
+}
+
+// === STAGGER ANIMATIONS ===
+
+@for $i from 1 through 20 {
+  .admin-stagger-#{$i} {
+    animation-delay: #{$i * 50}ms;
+  }
+}
+
+// === HOVER TRANSITIONS ===
+
+.admin-hover-lift {
+  @include admin-transition(transform, box-shadow);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $admin-shadow-lg;
+  }
+}
+
+.admin-hover-scale {
+  @include admin-transition(transform);
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+.admin-hover-glow {
+  @include admin-transition(box-shadow);
+
+  &:hover {
+    box-shadow: 0 0 20px rgba($admin-primary, 0.3);
+  }
+}
+
+// === PAGE TRANSITIONS ===
+
+.admin-page-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.admin-page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity $admin-transition-normal $admin-ease-out,
+              transform $admin-transition-normal $admin-ease-out;
+}
+
+.admin-page-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.admin-page-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity $admin-transition-fast $admin-ease-out,
+              transform $admin-transition-fast $admin-ease-out;
+}
+
+// === MODAL ANIMATIONS ===
+
+.admin-modal-backdrop-enter {
+  opacity: 0;
+}
+
+.admin-modal-backdrop-enter-active {
+  opacity: 1;
+  transition: opacity $admin-transition-normal $admin-ease-out;
+}
+
+.admin-modal-enter {
+  opacity: 0;
+  transform: scale(0.95) translateY(-10px);
+}
+
+.admin-modal-enter-active {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition: opacity $admin-transition-normal $admin-ease-out,
+              transform $admin-transition-normal $admin-ease-out;
+}
+
+.admin-modal-exit {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.admin-modal-exit-active {
+  opacity: 0;
+  transform: scale(0.95) translateY(-10px);
+  transition: opacity $admin-transition-fast $admin-ease-out,
+              transform $admin-transition-fast $admin-ease-out;
+}
+
+// === TOAST ANIMATIONS ===
+
+.admin-toast-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.admin-toast-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity $admin-transition-normal $admin-ease-out,
+              transform $admin-transition-normal $admin-ease-out;
+}
+
+.admin-toast-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.admin-toast-exit-active {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity $admin-transition-fast $admin-ease-out,
+              transform $admin-transition-fast $admin-ease-out;
+}
+
+// === DROPDOWN ANIMATIONS ===
+
+.admin-dropdown-enter {
+  opacity: 0;
+  transform: scaleY(0.8);
+  transform-origin: top;
+}
+
+.admin-dropdown-enter-active {
+  opacity: 1;
+  transform: scaleY(1);
+  transition: opacity $admin-transition-fast $admin-ease-out,
+              transform $admin-transition-fast $admin-ease-out;
+}
+
+// === PROGRESS BAR ===
+
+.admin-progress-bar {
+  height: 4px;
+  background: $admin-border;
+  border-radius: 2px;
+  overflow: hidden;
+
+  .dark-mode & {
+    background: $admin-border-dark;
+  }
+
+  &__fill {
+    height: 100%;
+    background: $admin-primary;
+    border-radius: 2px;
+    @include admin-transition(width);
+  }
+
+  &--indeterminate &__fill {
+    width: 30%;
+    animation: admin-progress-indeterminate 1.5s ease-in-out infinite;
+  }
+}
+
+// === REDUCED MOTION ===
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

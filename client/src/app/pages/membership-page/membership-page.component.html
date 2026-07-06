@@ -1,0 +1,147 @@
+<app-navbar></app-navbar>
+<app-title titre="DEVENEZ MEMBRE"></app-title>
+
+<section class="don-form-section">
+    <form class="don-form" [formGroup]="formMembre" (ngSubmit)="onSubmit()">
+        <div class="form-left">
+            <label for="typeAdhesion">Type d’adhésion :</label>
+            <div class="select-wrapper">
+                <select id="typeAdhesion" formControlName="typeAdhesion">
+                    <option [ngValue]="null" disabled selected>Sélectionner le type d’adhésion</option>
+                    <option *ngFor="let option of typeOptions" [ngValue]="option.value">
+                        {{ option.label }}
+                    </option>
+                </select>
+
+                @if(formMembre.get('typeAdhesion')?.touched && formMembre.get('typeAdhesion')?.invalid){
+                <div class="error">Veuillez choisir un type d’adhésion</div>
+                }
+                <span class="chevron">&#x25BC;</span>
+            </div>
+
+            <label for="prenom">Prénom :</label>
+            <input type="text" id="prenom" formControlName="prenom" maxlength="30" />
+            @if(formMembre.get('prenom')?.touched && formMembre.get('prenom')?.invalid){
+            <div class="error">Prénom requis</div>
+            }
+
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" formControlName="nom" maxlength="30" />
+            @if(formMembre.get('nom')?.touched && formMembre.get('nom')?.invalid){
+            <div class="error">Nom requis</div>
+            }
+
+            <label for="numero">Numéro :</label>
+            <input type="tel" id="numero" formControlName="numero" maxlength="25" />
+            <div *ngIf="formMembre.get('numero')?.touched && formMembre.get('numero')?.errors as errors" class="error">
+                <div *ngIf="errors['required']">Numéro requis</div>
+                <div *ngIf="errors['pattern']">Numéro invalide</div>
+            </div>
+
+            <label for="email">Adresse Mail :</label>
+            <input type="email" id="email" formControlName="email" maxlength="50" />
+            <div *ngIf="formMembre.get('email')?.touched && formMembre.get('email')?.errors as errors" class="error">
+                <div *ngIf="errors['required']">Adresse email requise</div>
+                <div *ngIf="errors['email']">Format d'adresse email invalide</div>
+            </div>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="consentement" formControlName="consentement" />
+                <label
+                    for="consentement"
+                    [ngClass]="{ 'error-text': formMembre.get('consentement')?.touched && formMembre.get('consentement')?.invalid }"
+                >
+                    J'autorise la transmission de mes informations personnelles.
+                </label>
+            </div>
+
+            <app-loading-spinner [show]="isLoading"></app-loading-spinner>
+
+            <button type="submit" class="submit-button">ACCÉDER AU PAIEMENT</button>
+        </div>
+
+        <div class="form-right">
+            <div class="telechargement-wrapper">
+                <span class="info-title">Voici la Fiche d’adhésion à télécharger</span>
+                <a href="assets/fiche_adhesion.pdf" download class="download-icon" aria-label="Télécharger la fiche">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        width="20"
+                        height="20"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                        />
+                    </svg>
+                </a>
+            </div>
+
+            <div class="fournir-bloc">
+                <p>Veuillez fournir :</p>
+                <ul>
+                    <li>CV</li>
+                    <li>Photo récente</li>
+                    <li>Pièce d’identité</li>
+                    <li>
+                        Fiche d’adhésion remplie et signée<br />
+                        <small>La seconde page n’est pas à remplir par l’utilisateur</small>
+                    </li>
+                </ul>
+
+                <div class="error" *ngIf="documentError">
+                    Tous les documents doivent être fournis (CV, photo, pièce d’identité, fiche d’adhésion).
+                </div>
+            </div>
+
+            <div class="documents-group">
+                <div class="document-upload">
+                    <label for="cv" class="custom-file-label">Déposer le CV :</label>
+                    <input type="file" id="cv" (change)="onFileSelect($event, 'cv')" />
+                    <div class="file-preview" *ngIf="fichiers.cv">
+                        <span>{{ fichiers.cv.name }}</span>
+                        <button type="button" (click)="removeFile('cv')">✕</button>
+                    </div>
+                    <div class="error" *ngIf="fileErrors.cv">{{ fileErrors.cv }}</div>
+                </div>
+
+                <div class="document-upload">
+                    <label for="photo" class="custom-file-label">Déposer une photo récente :</label>
+                    <input type="file" id="photo" (change)="onFileSelect($event, 'photo')" />
+                    <div class="file-preview" *ngIf="fichiers.photo">
+                        <span>{{ fichiers.photo.name }}</span>
+                        <button type="button" (click)="removeFile('photo')">✕</button>
+                    </div>
+                    <div class="error" *ngIf="fileErrors.photo">{{ fileErrors.photo }}</div>
+                </div>
+
+                <div class="document-upload">
+                    <label for="id" class="custom-file-label">Déposer la pièce d’identité :</label>
+                    <input type="file" id="id" (change)="onFileSelect($event, 'id')" />
+                    <div class="file-preview" *ngIf="fichiers.id">
+                        <span>{{ fichiers.id.name }}</span>
+                        <button type="button" (click)="removeFile('id')">✕</button>
+                    </div>
+                    <div class="error" *ngIf="fileErrors.id">{{ fileErrors.cv }}</div>
+                </div>
+
+                <div class="document-upload">
+                    <label for="formulaire" class="custom-file-label">Déposer la fiche d’adhésion remplie :</label>
+                    <input type="file" id="formulaire" (change)="onFileSelect($event, 'formulaire')" />
+                    <div class="file-preview" *ngIf="fichiers.formulaire">
+                        <span>{{ fichiers.formulaire.name }}</span>
+                        <button type="button" (click)="removeFile('formulaire')">✕</button>
+                    </div>
+                    <div class="error" *ngIf="fileErrors.formulaire">{{ fileErrors.formulaire }}</div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+<app-footer></app-footer>

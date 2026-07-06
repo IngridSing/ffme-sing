@@ -1,0 +1,87 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0, 0, 0, 0.5)" (click)="close()">
+    <div class="modal-dialog modal-lg" role="document" (click)="$event.stopPropagation()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ isEditMode ? 'Modifier' : 'Ajouter' }} une video</h5>
+                <button type="button" class="btn-close" (click)="close()"></button>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="videoForm" (ngSubmit)="onSubmit()" novalidate>
+                    <!-- Preview miniature -->
+                    <div *ngIf="thumbnailPreview" class="text-center mb-3">
+                        <img [src]="thumbnailPreview" class="img-fluid rounded shadow" style="max-height: 300px" alt="Miniature de la video" />
+                        <p class="text-muted mt-2 small">Apercu de la miniature</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="videoUrl" class="form-label">URL de la video</label>
+                        <input
+                            type="url"
+                            id="videoUrl"
+                            class="form-control"
+                            formControlName="videoUrl"
+                            placeholder="https://www.youtube.com/watch?v=..."
+                            [class.is-invalid]="videoForm.get('videoUrl')?.invalid && videoForm.get('videoUrl')?.touched"
+                        />
+                        <small class="text-muted">Collez l'URL YouTube ou Vimeo de votre video</small>
+                        <small class="text-danger d-block" *ngIf="videoForm.get('videoUrl')?.invalid && videoForm.get('videoUrl')?.touched">
+                            Une URL valide est requise.
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input
+                            type="date"
+                            id="date"
+                            class="form-control"
+                            formControlName="date"
+                            [class.is-invalid]="videoForm.get('date')?.invalid && videoForm.get('date')?.touched"
+                        />
+                        <small class="text-danger" *ngIf="videoForm.get('date')?.invalid && videoForm.get('date')?.touched">
+                            La date est requise.
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Titre</label>
+                        <input
+                            type="text"
+                            id="title"
+                            class="form-control"
+                            formControlName="title"
+                            [class.is-invalid]="videoForm.get('title')?.invalid && videoForm.get('title')?.touched"
+                        />
+                        <small class="text-danger" *ngIf="videoForm.get('title')?.invalid && videoForm.get('title')?.touched">
+                            Le titre est requis.
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea
+                            id="description"
+                            class="form-control"
+                            formControlName="description"
+                            rows="4"
+                            [class.is-invalid]="videoForm.get('description')?.invalid && videoForm.get('description')?.touched"
+                        ></textarea>
+                        <small class="text-danger" *ngIf="videoForm.get('description')?.invalid && videoForm.get('description')?.touched">
+                            La description est requise.
+                        </small>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success">Enregistrer</button>
+                    </div>
+
+                    <!-- Bouton Supprimer (uniquement en mode edition) -->
+                    <div class="d-flex justify-content-start mt-3" *ngIf="isEditMode && video">
+                        <button type="button" class="btn btn-outline-danger" (click)="deleteVideo()">Supprimer cette video</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

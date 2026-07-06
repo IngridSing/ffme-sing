@@ -1,0 +1,212 @@
+/* ===== SECTION FRANÇOIS MEYE PROFESSIONNELLE ===== */
+
+.intro-francois-meye {
+    position: relative;
+    padding: var(--space-xl) var(--space-md);
+    background-color: var(--blanc);
+    overflow: hidden;
+
+    .quote-container {
+        max-width: var(--max-width-lg);
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-xl);
+
+        @media (max-width: 768px) {
+            flex-direction: column-reverse;
+            text-align: center;
+        }
+    }
+
+    .quote-text {
+        position: relative;
+        flex: 1 1 55%;
+        max-width: 550px;
+        font-family: var(--font-serif);
+        font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+        line-height: 1.5;
+        color: var(--bleu);
+        font-weight: 400;
+        font-style: italic;
+        margin: 0;
+        padding-left: var(--space-xl);
+
+        @media (max-width: 768px) {
+            padding-left: 0;
+            max-width: 100%;
+        }
+    }
+
+    .quote-text .quote-icon {
+        position: absolute;
+        top: -0.5rem;
+        left: 0;
+        width: 40px;
+        height: auto;
+        opacity: 0.6;
+
+        @media (max-width: 768px) {
+            position: relative;
+            display: block;
+            margin: 0 auto var(--space-sm);
+            left: auto;
+            top: auto;
+        }
+    }
+
+    .image {
+        flex-shrink: 0;
+        width: clamp(220px, 28%, 340px);
+        height: auto;
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-lg);
+        position: relative;
+        z-index: 1;
+        transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+
+        &:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-xl);
+        }
+
+        @media (max-width: 768px) {
+            width: clamp(200px, 60%, 300px);
+            margin-bottom: var(--space-md);
+        }
+    }
+
+    /* Barre décorative en bas */
+    .frame {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 80px;
+        background: linear-gradient(
+            90deg,
+            var(--bleu-clair) 0%,
+            var(--bleu-clair-clair) 100%
+        );
+        z-index: 0;
+    }
+}
+
+/* Lien "Découvrir François Meye" */
+.link-qui-sommes-nous {
+    position: absolute;
+    bottom: var(--space-lg);
+    left: var(--space-xl);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--blanc);
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    font-weight: 600;
+    text-decoration: none;
+    z-index: 2;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    transition: all var(--transition-normal);
+
+    /* État initial pour animation */
+    opacity: 0;
+    transform: translateY(20px);
+
+    i {
+        font-size: var(--text-lg);
+        transition: transform var(--transition-fast);
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(0) translateX(-4px);
+
+        i {
+            transform: translateX(-6px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        justify-content: center;
+        margin-top: var(--space-md);
+        background: var(--bleu);
+        color: var(--blanc);
+    }
+}
+
+/* Animation au scroll */
+.animate-on-scroll.in-view .link-qui-sommes-nous {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease-out 0.8s, transform 0.6s ease-out 0.8s;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeSlideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeSlideRight {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeDrop {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* États initiaux pour animations */
+.animate-on-scroll .quote-icon,
+.animate-on-scroll .quote-text,
+.animate-on-scroll .image {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* États finaux animés */
+.animate-on-scroll.in-view .quote-icon {
+    opacity: 0.6;
+    transform: translateY(0);
+    transition-delay: 0.2s;
+}
+
+.animate-on-scroll.in-view .quote-text {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.4s;
+}
+
+.animate-on-scroll.in-view .image {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.6s;
+}

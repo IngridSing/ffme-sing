@@ -1,0 +1,29 @@
+@use '../../../../styles/admin/variables' as *;
+@use '../../../../styles/admin/sidebar';
+
+// Mobile toggle button (shown only on mobile)
+.admin-mobile-toggle {
+    display: none;
+    position: fixed;
+    top: $admin-spacing-md;
+    left: $admin-spacing-md;
+    width: 40px;
+    height: 40px;
+    border-radius: $admin-border-radius;
+    background: $admin-surface;
+    border: 1px solid $admin-border;
+    color: $admin-text-primary;
+    z-index: $admin-z-header;
+    cursor: pointer;
+    @include admin-transition(background, color);
+
+    &:hover {
+        background: $admin-bg;
+    }
+
+    @include admin-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

@@ -1,0 +1,128 @@
+<app-navbar></app-navbar>
+
+<app-title titre="NOS ACTUALITÉS"></app-title>
+
+<app-loading-spinner [show]="isLoading"></app-loading-spinner>
+
+<section class="articles-section container" *ngIf="!isLoading" [class.loading]="isLoadingPage">
+    <p class="results-info" *ngIf="totalNews > 0">
+        {{ totalNews }} actualité{{ totalNews > 1 ? 's' : '' }}
+        <span *ngIf="totalPages > 1"> — page {{ currentPage }} / {{ totalPages }}</span>
+    </p>
+
+    <div
+        class="article"
+        *ngFor="let article of newsList; let i = index"
+        [class.last]="i === newsList.length - 1"
+        [class.expanded]="isExpanded(article)"
+        (click)="toggleExpanded(article)"
+    >
+        <div class="article-info">
+            <div class="date">{{ formatDate(article.date) }}</div>
+            <h2 class="title" [class.expanded]="isExpanded(article)">
+                {{ isExpanded(article) ? article.title : truncate(article.title, 60) }}
+            </h2>
+            <p class="description" [class.expanded]="isExpanded(article)">
+                {{ isExpanded(article) ? article.description : truncate(article.description, 150) }}
+            </p>
+            <a *ngIf="article.externalLink" [href]="article.externalLink" target="_blank" rel="noopener noreferrer" class="read-article-link" (click)="$event.stopPropagation()">
+                Lire l'article complet
+                <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zm-2 16H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7h-7z"/>
+                </svg>
+            </a>
+        </div>
+
+        <div
+            class="article-image"
+            [ngStyle]="{
+                backgroundImage: 'url(' + getImageUrl(article.image) + ')',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+            }"
+        ></div>
+    </div>
+
+    <nav class="pagination" *ngIf="totalNews > 0" aria-label="Pagination des actualités">
+        <button
+            type="button"
+            class="pagination-btn pagination-nav"
+            [disabled]="currentPage === 1 || isLoadingPage"
+            (click)="goToPage(currentPage - 1)"
+            aria-label="Page précédente"
+        >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            <span>Précédent</span>
+        </button>
+
+        <div class="pagination-pages" role="group" aria-label="Numéros de page">
+            <button
+                type="button"
+                *ngFor="let page of pageNumbers"
+                class="pagination-btn page-number"
+                [class.active]="page === currentPage"
+                [disabled]="isLoadingPage"
+                [attr.aria-current]="page === currentPage ? 'page' : null"
+                [attr.aria-label]="'Page ' + page"
+                (click)="goToPage(page)"
+            >
+                {{ page }}
+            </button>
+        </div>
+
+        <span class="pagination-status" aria-live="polite">
+            Page <strong>{{ currentPage }}</strong> sur <strong>{{ totalPages }}</strong>
+        </span>
+
+        <button
+            type="button"
+            class="pagination-btn pagination-nav"
+            [disabled]="currentPage === totalPages || isLoadingPage"
+            (click)="goToPage(currentPage + 1)"
+            aria-label="Page suivante"
+        >
+            <span>Suivant</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        </button>
+    </nav>
+</section>
+
+<!-- Section Videos -->
+<section class="videos-section container" *ngIf="videosList.length > 0">
+    <div class="videos-header">
+        <h2>NOS VIDEOS</h2>
+        <p>Decouvrez nos actions en images</p>
+    </div>
+
+    <div class="videos-grid">
+        <div class="video-item" *ngFor="let video of videosList" (click)="openVideoModal(video)">
+            <div class="video-item__thumbnail">
+                <img [src]="video.thumbnailUrl" [alt]="video.title" loading="lazy" />
+                <div class="video-item__play">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="video-item__platform">
+                    <i [class]="video.platform === 'youtube' ? 'fab fa-youtube' : 'fab fa-vimeo-v'"></i>
+                </div>
+            </div>
+            <div class="video-item__info">
+                <span class="video-item__date">{{ formatDate(video.date) }}</span>
+                <h3 class="video-item__title">{{ truncate(video.title, 50) }}</h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Video Modal -->
+<app-video-modal
+    *ngIf="showVideoModal && selectedVideo"
+    [embedUrl]="selectedVideo.embedUrl"
+    [title]="selectedVideo.title"
+    (closed)="closeVideoModal()"
+></app-video-modal>
+
+<app-footer></app-footer>

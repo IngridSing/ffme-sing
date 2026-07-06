@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - '@scarf/scarf'
+  - bcrypt
+  - cpu-features
+  - sharp
+  - ssh2
+  - unrs-resolver

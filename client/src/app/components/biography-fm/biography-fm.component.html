@@ -1,0 +1,30 @@
+<div class="apropos-wrapper">
+    <div class="apropos-container">
+        <img src="/assets/fm.png" alt="François MEYE" class="apropos-image" #imageRef [class.image-animate]="imageVisible" />
+
+        <div class="apropos-text">
+            <h2>À PROPOS DE FRANÇOIS MEYE</h2>
+
+            <!-- Dans apropos-text -->
+            <div class="apropos-resume-text fade-in" *ngIf="!showFull" #resumeStart>
+                <p #resumeStartRef [innerHTML]="firstBlock"></p>
+                <div class="toggle-container">
+                    <a class="toggle-link" (click)="toggleBiography()">Voir Biographie Complète</a>
+                </div>
+            </div>
+
+            <!-- Première partie de la bio si showFull -->
+            <div *ngIf="showFull">
+                <p [innerHTML]="firstBlock"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deuxième partie de la bio + bouton réduire -->
+    <div *ngIf="showFull" class="apropos-below-text fade-in">
+        <p [innerHTML]="secondBlock"></p>
+        <div class="toggle-container">
+            <a class="toggle-link" (click)="toggleBiography()">Voir Moins</a>
+        </div>
+    </div>
+</div>

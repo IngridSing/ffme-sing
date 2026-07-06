@@ -1,0 +1,428 @@
+@use '../../../../styles/admin/variables' as *;
+
+// === LAYOUT ===
+.admin-content {
+    margin-left: $sidebar-width;
+    min-height: 100vh;
+    background: $admin-bg;
+    padding: $admin-spacing-xl;
+
+    @include admin-tablet {
+        padding: $admin-spacing-lg;
+    }
+
+    @include admin-mobile {
+        margin-left: 0;
+        padding: $admin-spacing-md;
+        padding-top: 80px; // Space for mobile header
+    }
+}
+
+// === HEADER ===
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $admin-spacing-xl;
+    flex-wrap: wrap;
+    gap: $admin-spacing-md;
+
+    &__left {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    &__title {
+        font-size: $admin-font-size-3xl;
+        font-weight: $admin-font-weight-bold;
+        color: $admin-text-primary;
+        margin: 0 0 $admin-spacing-xs 0;
+
+        @include admin-mobile {
+            font-size: $admin-font-size-2xl;
+        }
+    }
+
+    &__subtitle {
+        font-size: $admin-font-size-sm;
+        color: $admin-text-secondary;
+        margin: 0;
+    }
+
+    &__right {
+        display: flex;
+        gap: $admin-spacing-sm;
+        flex-wrap: wrap;
+
+        @include admin-mobile {
+            width: 100%;
+            flex-direction: column;
+        }
+    }
+}
+
+// === ADMIN BUTTONS ===
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $admin-spacing-sm;
+    padding: $admin-spacing-sm $admin-spacing-lg;
+    font-size: $admin-font-size-sm;
+    font-weight: $admin-font-weight-medium;
+    border-radius: $admin-border-radius;
+    cursor: pointer;
+    @include admin-transition(all);
+    border: 1px solid transparent;
+    white-space: nowrap;
+
+    i {
+        font-size: 14px;
+    }
+
+    @include admin-mobile {
+        width: 100%;
+        padding: $admin-spacing-md;
+        min-height: 44px; // Touch-friendly
+    }
+
+    &--outline {
+        background: $admin-surface;
+        border-color: $admin-border;
+        color: $admin-text-primary;
+
+        &:hover {
+            border-color: $admin-primary;
+            color: $admin-primary;
+        }
+    }
+
+    &--danger-outline {
+        background: transparent;
+        border-color: $status-danger;
+        color: $status-danger;
+
+        &:hover {
+            background: $status-danger;
+            color: white;
+        }
+    }
+}
+
+// === STATS GRID ===
+.dashboard-stats {
+    margin-bottom: $admin-spacing-xl;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $admin-spacing-lg;
+
+    @media (max-width: $admin-breakpoint-xl) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include admin-tablet {
+        grid-template-columns: repeat(2, 1fr);
+        gap: $admin-spacing-md;
+    }
+
+    @include admin-mobile {
+        grid-template-columns: 1fr;
+        gap: $admin-spacing-md;
+    }
+}
+
+// === CHART SECTION ===
+.dashboard-chart {
+    margin-bottom: $admin-spacing-xl;
+}
+
+.chart-card {
+    @include admin-card;
+    overflow: hidden;
+
+    &__header {
+        padding: $admin-spacing-lg;
+        border-bottom: 1px solid $admin-border;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__title {
+        font-size: $admin-font-size-lg;
+        font-weight: $admin-font-weight-semibold;
+        color: $admin-text-primary;
+        margin: 0;
+    }
+
+    &__subtitle {
+        font-size: $admin-font-size-sm;
+        color: $admin-text-secondary;
+    }
+
+    &__body {
+        padding: $admin-spacing-lg;
+        height: 350px;
+
+        @include admin-tablet {
+            height: 300px;
+        }
+
+        @include admin-mobile {
+            height: 250px;
+            padding: $admin-spacing-md;
+        }
+    }
+}
+
+// === SECONDARY STATS ===
+.dashboard-secondary {
+    margin-bottom: $admin-spacing-xl;
+}
+
+.secondary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $admin-spacing-lg;
+
+    @include admin-tablet {
+        grid-template-columns: repeat(2, 1fr);
+        gap: $admin-spacing-md;
+    }
+
+    @include admin-mobile {
+        grid-template-columns: 1fr;
+        gap: $admin-spacing-md;
+    }
+}
+
+.secondary-card {
+    @include admin-card;
+    display: flex;
+    align-items: center;
+    gap: $admin-spacing-lg;
+    padding: $admin-spacing-lg;
+    @include admin-transition(transform, box-shadow);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: $admin-shadow-md;
+    }
+
+    &__icon {
+        width: 48px;
+        height: 48px;
+        border-radius: $admin-border-radius-lg;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+
+        &--products {
+            background: rgba($admin-primary, 0.1);
+            color: $admin-primary;
+        }
+
+        &--news {
+            background: $status-info-light;
+            color: $status-info-dark;
+        }
+
+        &--gallery {
+            background: $status-success-light;
+            color: $status-success-dark;
+        }
+    }
+
+    &__content {
+        flex: 1;
+    }
+
+    &__value {
+        display: block;
+        font-size: $admin-font-size-2xl;
+        font-weight: $admin-font-weight-bold;
+        color: $admin-text-primary;
+    }
+
+    &__label {
+        display: block;
+        font-size: $admin-font-size-sm;
+        color: $admin-text-secondary;
+    }
+}
+
+// === TABLES SECTION ===
+.dashboard-tables {
+    margin-bottom: $admin-spacing-xl;
+}
+
+.tables-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $admin-spacing-lg;
+
+    @media (max-width: $admin-breakpoint-lg) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// === ACTIVITY CARD ===
+.activity-card {
+    @include admin-card;
+    overflow: hidden;
+
+    &__header {
+        padding: $admin-spacing-lg;
+        border-bottom: 1px solid $admin-border;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__title {
+        font-size: $admin-font-size-base;
+        font-weight: $admin-font-weight-semibold;
+        color: $admin-text-primary;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: $admin-spacing-sm;
+
+        i {
+            color: $admin-primary;
+        }
+    }
+
+    &__link {
+        font-size: $admin-font-size-sm;
+        color: $admin-primary;
+        text-decoration: none;
+        font-weight: $admin-font-weight-medium;
+        @include admin-transition(color);
+
+        &:hover {
+            color: $admin-primary-dark;
+        }
+    }
+
+    &__body {
+        padding: 0;
+    }
+}
+
+// === ACTIVITY LIST ===
+.activity-list {
+    max-height: 320px;
+    overflow-y: auto;
+    @include admin-scrollbar;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: $admin-spacing-md;
+    padding: $admin-spacing-md $admin-spacing-lg;
+    cursor: pointer;
+    @include admin-transition(background);
+
+    &:hover {
+        background: $admin-surface-hover;
+    }
+
+    &:not(:last-child) {
+        border-bottom: 1px solid $admin-border;
+    }
+
+    &__avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, $admin-primary 0%, $admin-primary-light 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: $admin-font-size-sm;
+        font-weight: $admin-font-weight-semibold;
+        flex-shrink: 0;
+
+        &--order {
+            background: linear-gradient(135deg, $status-warning 0%, $status-warning-dark 100%);
+        }
+    }
+
+    &__info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__name {
+        display: block;
+        font-size: $admin-font-size-sm;
+        font-weight: $admin-font-weight-medium;
+        color: $admin-text-primary;
+        @include admin-text-truncate;
+    }
+
+    &__date {
+        display: block;
+        font-size: $admin-font-size-xs;
+        color: $admin-text-muted;
+    }
+
+    &__right {
+        text-align: right;
+        flex-shrink: 0;
+    }
+
+    &__amount {
+        display: block;
+        font-size: $admin-font-size-sm;
+        font-weight: $admin-font-weight-semibold;
+        color: $admin-text-primary;
+    }
+
+    &__status {
+        display: inline-block;
+        padding: 2px 8px;
+        font-size: $admin-font-size-xs;
+        font-weight: $admin-font-weight-medium;
+        border-radius: 9999px;
+
+        &--success {
+            background: $status-success-light;
+            color: $status-success-dark;
+        }
+
+        &--warning {
+            background: $status-warning-light;
+            color: $status-warning-dark;
+        }
+
+        &--danger {
+            background: $status-danger-light;
+            color: $status-danger-dark;
+        }
+    }
+}
+
+// === EMPTY STATE ===
+.activity-empty {
+    padding: $admin-spacing-2xl;
+    text-align: center;
+    color: $admin-text-muted;
+
+    i {
+        font-size: 32px;
+        margin-bottom: $admin-spacing-sm;
+        display: block;
+    }
+
+    span {
+        font-size: $admin-font-size-sm;
+    }
+}

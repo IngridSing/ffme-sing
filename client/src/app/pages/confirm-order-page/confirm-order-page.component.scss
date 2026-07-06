@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+.don-form-section {
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.don-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center; /* ← ajoute ceci pour centrer verticalement */
+    gap: 40px;
+    max-width: 1000px;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+}
+
+.form-left,
+.form-right {
+    flex: 1 1 45%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-right {
+    align-self: center;
+}
+
+label {
+    font-weight: 500;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='tel'] {
+    padding: 12px;
+    border: 1px solid #000;
+    border-radius: 6px;
+    font-size: 18px;
+    width: 100%;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.checkbox-container input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+}
+
+.submit-button {
+    margin-top: 10px;
+    padding: 14px 0;
+    background-color: #002bbb;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.error-text {
+    color: red;
+    font-weight: 500;
+}
+
+.option-container {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background-color: #f9f9f9;
+}
+
+.option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+.option-label input[type='radio'] {
+    margin-top: 5px;
+}
+
+.option-content {
+    flex: 1;
+}
+
+.option-content p {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+}
+
+.montant {
+    margin-top: 0.5rem;
+    font-weight: bold;
+}
+
+.autre-option {
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+.description {
+    font-size: 0.95rem;
+    color: #333;
+    margin: 0.5rem 0;
+}
+
+.wide-button {
+    width: 100%;
+    max-width: 100%;
+}
+
+.result-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+
+    &.success .icon {
+        font-size: 50px;
+        color: green;
+    }
+
+    &.error .icon {
+        font-size: 50px;
+        color: red;
+    }
+
+    .result-content {
+        text-align: center;
+
+        h1 {
+            margin: 10px 0;
+            font-size: 28px;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    }
+}

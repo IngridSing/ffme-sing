@@ -1,0 +1,43 @@
+# ========================================
+# DOCKERFILE CLIENT - PRODUCTION
+# ========================================
+
+# Build stage
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+RUN npm install -g pnpm
+
+# Copier les fichiers communs (requis pour @common/*)
+COPY common ./common
+COPY client/package.json client/pnpm-lock.yaml ./client/
+
+WORKDIR /app/client
+RUN pnpm install --frozen-lockfile
+
+WORKDIR /app
+COPY client ./client
+
+WORKDIR /app/client
+
+# Build en mode PRODUCTION (utilise environment.prod.ts)
+RUN pnpm ng build --configuration production
+
+# Dependencies stage
+FROM node:20-alpine AS deps
+
+WORKDIR /app
+RUN npm install serve
+
+# Production stage (distroless pour sécurité)
+FROM gcr.io/distroless/nodejs20-debian12
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/client/dist/client ./dist
+
+EXPOSE 80
+
+# Serve en mode SPA (-s redirige toutes les routes vers index.html)
+CMD ["node_modules/serve/build/main.js", "-s", "dist", "-l", "80"]

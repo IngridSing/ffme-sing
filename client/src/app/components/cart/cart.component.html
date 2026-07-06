@@ -1,0 +1,30 @@
+<div class="simple-cart">
+    <button class="toggle-btn" (click)="toggle()">
+        <img src="https://www.gstatic.com/images/icons/material/system/2x/shopping_cart_white_24dp.png" alt="Cart" />
+    </button>
+
+    <div class="cart-box" *ngIf="isOpen">
+        <h5>Panier</h5>
+
+        <div *ngIf="groupedCart.length === 0" class="empty">Aucun article</div>
+
+        <div class="product-block" *ngFor="let entry of groupedCart">
+            <div class="top-row">
+                <span class="title">{{ entry.product.title }}</span>
+                <button (click)="removeOne(entry.product, entry.versionIndex)" class="remove-btn">✕</button>
+            </div>
+            <div class="details">
+                <div><strong>Version :</strong> {{ entry.product.versions[entry.versionIndex].label }}</div>
+                <div><strong>Prix :</strong> {{ entry.product.versions[entry.versionIndex].price | number: '1.0-0' }} FCFA</div>
+
+                <div><strong>Qté :</strong> {{ entry.count }}</div>
+            </div>
+        </div>
+
+        <p class="total">
+            Total : <strong>{{ total | number: '1.0-0' }} FCFA</strong>
+        </p>
+
+        <button class="btn-validate" (click)="validate()">Valider</button>
+    </div>
+</div>

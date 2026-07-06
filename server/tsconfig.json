@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./",
+        "target": "ES2022",
+        "lib": ["ES2022"],
+        "types": ["node", "reflect-metadata", "@types/mocha", "mocha"],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "out",
+        "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedLocals": true,
+        "noImplicitReturns": true,
+        "resolveJsonModule": false, // DO NOT CHANGE
+        "paths": {
+            "@app/*": ["./app/*"],
+            "@common/*": ["../common/*"]
+        }
+    },
+    "exclude": ["**/*.spec.ts"]
+}

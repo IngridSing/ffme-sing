@@ -1,0 +1,73 @@
+<app-navbar></app-navbar>
+
+<section class="shop">
+    <div class="shop__container">
+        <!-- Header -->
+        <div class="shop__header">
+            <h1>Notre Boutique</h1>
+            <p>Soutenez la Fondation en découvrant nos publications</p>
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="isLoading" class="shop__loading">
+            <p>Chargement des produits...</p>
+        </div>
+
+        <!-- Error -->
+        <div *ngIf="hasError && !isLoading" class="shop__error">
+            <p>Impossible de charger les produits. Veuillez réessayer.</p>
+        </div>
+
+        <!-- Featured Product -->
+        <div class="featured" *ngIf="!isLoading && !hasError && featuredProduct">
+            <div class="featured__badge">★ Produit vedette</div>
+            <a class="featured__card" [routerLink]="['/produit', featuredProduct._id]">
+                <div class="featured__image">
+                    <app-cached-image [src]="getProductImageUrl(featuredProduct.image)" [alt]="featuredProduct.title"></app-cached-image>
+                </div>
+                <div class="featured__content">
+                    <span class="featured__type">{{ featuredProduct.type }}</span>
+                    <h2>{{ featuredProduct.title }}</h2>
+                    <p class="featured__desc">{{ featuredProduct.description }}</p>
+                    <div class="featured__meta">
+                        <span class="featured__price">{{ featuredProduct.versions[0]?.price | number }} FCFA</span>
+                        <span class="featured__rating" *ngIf="featuredProduct.averageReview">
+                            ★ {{ featuredProduct.averageReview.toFixed(1) }}/4
+                        </span>
+                    </div>
+                    <button class="featured__btn">Voir le produit</button>
+                </div>
+            </a>
+        </div>
+
+        <!-- All Products -->
+        <div class="products" *ngIf="!isLoading && !hasError && products.length > 0">
+            <h3 class="products__title">Tous nos produits</h3>
+            <div class="products__grid">
+                <a *ngFor="let product of products"
+                   class="product-card"
+                   [routerLink]="['/produit', product._id]">
+                    <div class="product-card__image">
+                        <app-cached-image [src]="getProductImageUrl(product.image)" [alt]="product.title"></app-cached-image>
+                        <span class="product-card__badge" *ngIf="product._id === featuredProduct?._id">★</span>
+                    </div>
+                    <div class="product-card__content">
+                        <span class="product-card__type">{{ product.type }}</span>
+                        <h4>{{ product.title }}</h4>
+                        <div class="product-card__footer">
+                            <span class="product-card__price">{{ product.versions[0]?.price | number }} FCFA</span>
+                            <span class="product-card__rating" *ngIf="product.averageReview">★ {{ product.averageReview.toFixed(1) }}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Empty -->
+        <div *ngIf="!isLoading && !hasError && products.length === 0" class="shop__empty">
+            <p>Aucun produit disponible pour le moment.</p>
+        </div>
+    </div>
+</section>
+
+<app-footer></app-footer>

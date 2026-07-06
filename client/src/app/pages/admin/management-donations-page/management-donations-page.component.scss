@@ -1,0 +1,75 @@
+@use '../../../../styles/admin/variables' as *;
+
+// === LAYOUT ===
+.admin-content {
+    margin-left: $sidebar-width;
+    min-height: 100vh;
+    background: $admin-bg;
+    padding: $admin-spacing-xl;
+
+    @include admin-mobile {
+        margin-left: 0;
+        padding: $admin-spacing-md;
+    }
+}
+
+// === PAGE HEADER ===
+.admin-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $admin-spacing-xl;
+    flex-wrap: wrap;
+    gap: $admin-spacing-md;
+
+    &__left {
+        flex: 1;
+    }
+
+    &__title {
+        font-size: $admin-font-size-3xl;
+        font-weight: $admin-font-weight-bold;
+        color: $admin-text-primary;
+        margin: 0 0 $admin-spacing-xs 0;
+    }
+
+    &__subtitle {
+        font-size: $admin-font-size-sm;
+        color: $admin-text-secondary;
+        margin: 0;
+    }
+
+    &__right {
+        display: flex;
+        gap: $admin-spacing-sm;
+    }
+}
+
+// === ADMIN BUTTONS ===
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $admin-spacing-sm;
+    padding: $admin-spacing-sm $admin-spacing-lg;
+    font-size: $admin-font-size-sm;
+    font-weight: $admin-font-weight-medium;
+    border-radius: $admin-border-radius;
+    cursor: pointer;
+    @include admin-transition(all);
+    border: 1px solid transparent;
+
+    i {
+        font-size: 14px;
+    }
+
+    &--outline {
+        background: $admin-surface;
+        border-color: $admin-border;
+        color: $admin-text-primary;
+
+        &:hover {
+            border-color: $admin-primary;
+            color: $admin-primary;
+        }
+    }
+}
