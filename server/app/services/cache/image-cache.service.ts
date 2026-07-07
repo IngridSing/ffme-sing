@@ -27,8 +27,8 @@ export class ImageCacheService {
     async getImage(relativePath: string): Promise<{ stream: Readable; mime: string }> {
         await this.initialize();
 
-        const localPath = this.resolvePath(relativePath);
-        if (!fsSync.existsSync(localPath)) {
+        const localPath = this.resolveExistingPath(relativePath);
+        if (!localPath || !fsSync.existsSync(localPath)) {
             throw new Error(`Image non trouvee: ${relativePath}`);
         }
 
@@ -41,7 +41,7 @@ export class ImageCacheService {
     async saveImage(relativePath: string, buffer: Buffer): Promise<void> {
         await this.initialize();
 
-        const localPath = this.resolvePath(relativePath);
+        const localPath = this.resolvePathForWrite(relativePath);
         await fs.mkdir(path.dirname(localPath), { recursive: true });
         await fs.writeFile(localPath, buffer);
         console.log(`➕ Image sauvegardee: ${relativePath}`);
@@ -52,7 +52,9 @@ export class ImageCacheService {
     }
 
     async removeImage(relativePath: string): Promise<void> {
-        const localPath = this.resolvePath(relativePath);
+        const localPath = this.resolveExistingPath(relativePath);
+        if (!localPath) return;
+
         try {
             await fs.unlink(localPath);
             console.log(`🗑️  Image supprimee: ${relativePath}`);
@@ -73,15 +75,44 @@ export class ImageCacheService {
         return this.isInitialized;
     }
 
-    private resolvePath(relativePath: string): string {
-        const normalized = path.normalize(relativePath).replace(/^(\.\.(\/|\\|$))+/, '');
-        const fullPath = path.resolve(this.uploadsDir, normalized);
+    private resolvePathForWrite(relativePath: string): string {
+        const sanitized = this.sanitizeRelativePath(relativePath);
+        const parts = sanitized.split('/').map((p) => p.normalize('NFC'));
+        const fullPath = path.resolve(this.uploadsDir, ...parts);
+        this.assertWithinUploads(fullPath);
+        return fullPath;
+    }
 
-        if (!fullPath.startsWith(path.resolve(this.uploadsDir))) {
-            throw new Error('Chemin invalide');
+    /** Résout un chemin existant (lecture), en gérant NFC/NFD macOS vs MongoDB. */
+    private resolveExistingPath(relativePath: string): string | null {
+        const sanitized = this.sanitizeRelativePath(relativePath);
+        const parts = sanitized.split('/');
+        let current = path.resolve(this.uploadsDir);
+
+        for (const segment of parts) {
+            if (!fsSync.existsSync(current)) return null;
+
+            const entries = fsSync.readdirSync(current);
+            const match = entries.find((entry) => entry.normalize('NFC') === segment.normalize('NFC'));
+            if (!match) return null;
+
+            current = path.join(current, match);
         }
 
-        return fullPath;
+        this.assertWithinUploads(current);
+        return current;
+    }
+
+    private sanitizeRelativePath(relativePath: string): string {
+        const normalized = path.normalize(relativePath).replace(/^(\.\.(\/|\\|$))+/, '');
+        return normalized.split(path.sep).join('/');
+    }
+
+    private assertWithinUploads(fullPath: string): void {
+        const root = path.resolve(this.uploadsDir);
+        if (!fullPath.startsWith(root)) {
+            throw new Error('Chemin invalide');
+        }
     }
 
     private getMimeType(filename: string): string {
