@@ -9,7 +9,12 @@
             <div class="videos-slides" [style.transform]="getTransform()">
                 <div class="video-slide" *ngFor="let video of videosList; let i = index">
                     <div class="video-slide__thumbnail" (click)="openVideo(video)">
-                        <img [src]="video.thumbnailUrl" [alt]="video.title" loading="lazy" />
+                        <img
+                            [src]="video.thumbnailUrl"
+                            [alt]="video.title"
+                            loading="lazy"
+                            (error)="onThumbnailError($event, video)"
+                        />
                         <div class="video-slide__overlay"></div>
                         <div class="video-slide__play">
                             <i class="fas fa-play"></i>

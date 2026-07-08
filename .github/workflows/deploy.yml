@@ -47,10 +47,6 @@ jobs:
                       echo "=== 2. Création du fichier .env ==="
                       echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
                       echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-                      echo "FTP_HOST=${{ secrets.FTP_HOST }}" >> .env
-                      echo "FTP_PORT=${{ secrets.FTP_PORT }}" >> .env
-                      echo "FTP_USER=${{ secrets.FTP_USER }}" >> .env
-                      echo "FTP_PASSWORD=${{ secrets.FTP_PASSWORD }}" >> .env
                       echo "SMTP_HOST=${{ secrets.SMTP_HOST }}" >> .env
                       echo "SMTP_PORT=${{ secrets.SMTP_PORT }}" >> .env
                       echo "SMTP_USER=${{ secrets.SMTP_USER }}" >> .env

@@ -7,8 +7,9 @@ import { Readable } from 'stream';
 import { Service } from 'typedi';
 import { v4 as uuidv4 } from 'uuid';
 
+/** Persistance des actualités : métadonnées en MongoDB, images dans uploads/newsImages/ */
 @Service()
-export class NewsDatabaseFtpService {
+export class NewsStorageService {
     constructor(private readonly imageCache: ImageCacheService) {}
 
     async getAll(): Promise<News[]> {

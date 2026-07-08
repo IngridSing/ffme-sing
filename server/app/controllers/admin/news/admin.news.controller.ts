@@ -1,7 +1,7 @@
 import { authenticateToken } from '@app/middlewares/auth.middleware';
 import { connectionLimiter } from '@app/middlewares/connectionLimiter.middleware';
 import { imageRateLimiter } from '@app/middlewares/imageRateLimiter.middleware';
-import { NewsDatabaseFtpService } from '@app/services/database/news/news.database.ftp.service';
+import { NewsStorageService } from '@app/services/database/news/news.storage.service';
 import { streamImageResponse } from '@app/utils/image-route.util';
 import { Request, Response, Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -12,7 +12,7 @@ import { Service } from 'typedi';
 export class AdminNewsController {
     public router: Router;
 
-    constructor(private readonly newsDbService: NewsDatabaseFtpService) {
+    constructor(private readonly newsDbService: NewsStorageService) {
         this.router = Router();
         this.configureRoutes();
     }

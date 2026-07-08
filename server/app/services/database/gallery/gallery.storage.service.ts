@@ -13,8 +13,9 @@ interface GalleryFilters {
     search?: string;
 }
 
+/** Persistance de la galerie : métadonnées en MongoDB, images dans uploads/galleryImages/ */
 @Service()
-export class GalleryDatabaseFtpService {
+export class GalleryStorageService {
     constructor(private readonly imageCache: ImageCacheService) {}
 
     async getAll(): Promise<GalleryPhoto[]> {

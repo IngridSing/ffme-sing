@@ -2,10 +2,10 @@ import { authenticateToken } from '@app/middlewares/auth.middleware';
 import { adminLoginSchema } from '@app/schemas/admin.schema';
 import { AuthService } from '@app/services/auth/auth.service';
 import { DonationDatabaseService } from '@app/services/database/donation/donation.database.service';
-import { GalleryDatabaseFtpService } from '@app/services/database/gallery/gallery.database.ftp.service';
+import { GalleryStorageService } from '@app/services/database/gallery/gallery.storage.service';
 import { MemberDatabaseService } from '@app/services/database/member/member.databse.service';
 import { MongoStorageService } from '@app/services/database/member/mongo-storage.service';
-import { NewsDatabaseFtpService } from '@app/services/database/news/news.database.ftp.service';
+import { NewsStorageService } from '@app/services/database/news/news.storage.service';
 import { ProductDatabaseService } from '@app/services/database/product/product.database.service';
 import { TransactionDatabaseService } from '@app/services/database/transaction/transaction.database.service';
 import { PaymentStatus } from '@common/enums/payment-status';
@@ -21,8 +21,8 @@ export class AdminController {
         private mongoStorageService: MongoStorageService,
         private donationDatabaseService: DonationDatabaseService,
         private productDbService: ProductDatabaseService,
-        private newsDbService: NewsDatabaseFtpService,
-        private galleryDbService: GalleryDatabaseFtpService,
+        private newsDbService: NewsStorageService,
+        private galleryDbService: GalleryStorageService,
         private authService: AuthService,
         private transactionDbService: TransactionDatabaseService,
     ) {

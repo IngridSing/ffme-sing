@@ -38,7 +38,6 @@ export class MemberDatabaseService {
         const member = await MemberModel.findOne({ idMember: id }).exec();
         if (!member) throw new Error('Membre non trouvé');
 
-        //const documents = await this.ftpService.getDocumentsForMembership(id);
         const documents = await this.mongoStorageService.getDocumentsForMembership(id);
         return { member: member.toObject(), document: documents };
     }

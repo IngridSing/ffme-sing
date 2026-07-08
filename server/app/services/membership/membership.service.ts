@@ -38,10 +38,6 @@ export class MembershipService {
         const cleanData: MembershipData = parsed.data;
         const membershipId = crypto.randomUUID();
 
-        // Ancien FTP (commenté) :
-        // const ftpResult = await this.ftpUploadService.uploadFilesToMembershipFolder(membershipId, files);
-
-        // Nouveau : upload des fichiers dans MongoDB
         const uploadResult = await this.mongoStorageService.uploadTempFiles(membershipId, files);
 
         if (!uploadResult.success) {
@@ -152,9 +148,7 @@ export class MembershipService {
             };
         }
 
-        // Sinon, on considère que c’est un paiement manuel
-        // 3. Déplacer les fichiers vers le dossier final
-        //const moveResult = await this.ftpUploadService.moveMembershipFolderToValid(membershipId);
+        // Déplacer les fichiers temporaires vers le stockage définitif (GridFS)
         const moveResult = await this.mongoStorageService.moveTempToValid(membershipId);
 
         if (!moveResult.success) {
@@ -321,9 +315,9 @@ export class MembershipService {
         this.timeouts.delete(id);
         try {
             await this.mongoStorageService.deleteTempFiles(id);
-            console.log(`Dossier FTP pour l'adhésion ${id} supprimé.`);
+            console.log(`Fichiers temporaires supprimés pour l'adhésion ${id}.`);
         } catch (err) {
-            console.warn(`Impossible de supprimer le dossier FTP de ${id} :`, err);
+            console.warn(`Impossible de supprimer les fichiers temporaires de ${id} :`, err);
         }
         return deleted;
     }

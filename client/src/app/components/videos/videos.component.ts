@@ -85,4 +85,19 @@ export class VideosComponent implements OnInit, OnDestroy {
             this.intervalId = setInterval(() => this.nextSlide(), 12000);
         }
     }
+
+    onThumbnailError(event: Event, video: Video): void {
+        const img = event.target as HTMLImageElement;
+        const videoId = this.extractYoutubeId(video.videoUrl);
+        if (!videoId || img.dataset.fallback === 'true') {
+            return;
+        }
+        img.dataset.fallback = 'true';
+        img.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    }
+
+    private extractYoutubeId(url: string): string | null {
+        const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|watch\?v=))([^?&/]+)/);
+        return match?.[1] ?? null;
+    }
 }

@@ -4,6 +4,13 @@ import * as path from 'path';
 import { Readable } from 'stream';
 import { Service } from 'typedi';
 
+/**
+ * Stockage local des images du site (galerie, actualités, produits).
+ *
+ * - Chemin racine : UPLOADS_DIR (défaut ./uploads, en Docker /app/uploads)
+ * - Montage volume : ./uploads:/app/uploads
+ * - Aucun SFTP à l'exécution ; le script migrate-sftp-to-local.ts est one-shot uniquement
+ */
 @Service()
 export class ImageCacheService {
     private readonly uploadsDir: string;

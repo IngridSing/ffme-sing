@@ -4,11 +4,12 @@
         <p class="section-subtitle">Restez informe de nos dernieres actions</p>
     </div>
 
-    <div class="carousel-container">
-        <div class="carousel">
+    <div class="carousel-container" *ngIf="newsList.length > 0">
+        <div class="news-carousel">
             <div class="slides" [style.transform]="getTransform()">
                 <div class="slide" *ngFor="let news of newsList; let i = index">
-                    <div class="slide-image" [style.backgroundImage]="'url(' + getImageUrl(news.image) + ')'">
+                    <div class="slide-image">
+                        <img [src]="getImageUrl(news.image)" [alt]="news.title" loading="lazy" />
                         <div class="slide-overlay"></div>
                     </div>
                     <div class="slide-content">
@@ -27,21 +28,31 @@
             </div>
 
             <!-- Navigation buttons -->
-            <button class="nav-btn nav-btn--prev" (click)="prevSlide()" aria-label="Precedent">
+            <button
+                class="nav-btn nav-btn--prev"
+                (click)="prevSlide()"
+                aria-label="Precedent"
+                *ngIf="newsList.length > 1"
+            >
                 <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="nav-btn nav-btn--next" (click)="nextSlide()" aria-label="Suivant">
+            <button
+                class="nav-btn nav-btn--next"
+                (click)="nextSlide()"
+                aria-label="Suivant"
+                *ngIf="newsList.length > 1"
+            >
                 <i class="fas fa-chevron-right"></i>
             </button>
 
             <!-- Progress bar -->
-            <div class="progress-bar">
-                <div class="progress-bar__fill" [style.width]="((currentIndex + 1) / newsList.length * 100) + '%'"></div>
+            <div class="progress-bar" *ngIf="newsList.length > 1">
+                <div class="progress-bar__fill" [style.width]="progressWidth"></div>
             </div>
         </div>
 
         <!-- Dots navigation -->
-        <div class="dots-nav">
+        <div class="dots-nav" *ngIf="newsList.length > 1">
             <button
                 *ngFor="let news of newsList; let i = index"
                 class="dot"

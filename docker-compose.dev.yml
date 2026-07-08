@@ -66,14 +66,10 @@ services:
       SINGPAY_CLIENT_SECRET: ${SINGPAY_CLIENT_SECRET:-}
       SINGPAY_WALLET_ID: ${SINGPAY_WALLET_ID:-}
       SINGPAY_DISBURSEMENT_ID: ${SINGPAY_DISBURSEMENT_ID:-}
-      FTP_HOST: ${FTP_HOST:-}
-      FTP_PORT: ${FTP_PORT:-22}
-      FTP_USER: ${FTP_USER:-}
-      FTP_PASSWORD: ${FTP_PASSWORD:-}
     volumes:
       - ./server/app:/app/server/app
       - ./common:/app/common
-      - server_uploads_dev:/app/uploads
+      - ./uploads:/app/uploads
     ports:
       - "5001:3000"
     networks:
@@ -105,6 +101,4 @@ networks:
 
 volumes:
   mongodb_data_dev:
-    driver: local
-  server_uploads_dev:
     driver: local

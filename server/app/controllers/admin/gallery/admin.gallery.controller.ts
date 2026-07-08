@@ -1,7 +1,7 @@
 import { authenticateToken } from '@app/middlewares/auth.middleware';
 import { connectionLimiter } from '@app/middlewares/connectionLimiter.middleware';
 import { imageRateLimiter } from '@app/middlewares/imageRateLimiter.middleware';
-import { GalleryDatabaseFtpService } from '@app/services/database/gallery/gallery.database.ftp.service';
+import { GalleryStorageService } from '@app/services/database/gallery/gallery.storage.service';
 import { streamImageResponse } from '@app/utils/image-route.util';
 import { Request, Response, Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -12,7 +12,7 @@ import { Service } from 'typedi';
 export class AdminGalleryController {
     public router: Router;
 
-    constructor(private readonly galleryDbService: GalleryDatabaseFtpService) {
+    constructor(private readonly galleryDbService: GalleryStorageService) {
         this.router = Router();
         this.configureRoutes();
     }
@@ -206,7 +206,7 @@ export class AdminGalleryController {
                 }
                 return res.status(StatusCodes.OK).json(updated);
             } catch (err) {
-                console.error('❌ [PUT] Erreur modification FTP :', err);
+                console.error('❌ [PUT] Erreur modification photo :', err);
                 return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, message: 'Erreur serveur.' });
             }
         });
@@ -241,7 +241,7 @@ export class AdminGalleryController {
                 }
                 return res.status(StatusCodes.OK).json({ success: true, message: 'Photo supprimée avec succès' });
             } catch (err) {
-                console.error('❌ [DELETE] Erreur suppression FTP :', err);
+                console.error('❌ [DELETE] Erreur suppression photo :', err);
                 return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, message: 'Erreur serveur' });
             }
         });

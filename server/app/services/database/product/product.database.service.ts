@@ -10,6 +10,7 @@ import { Readable } from 'stream';
 import { Service } from 'typedi';
 import { v4 as uuidv4 } from 'uuid';
 
+/** Persistance des produits : métadonnées en MongoDB, images dans uploads/productImages/ */
 @Service()
 export class ProductDatabaseService {
     constructor(private readonly imageCache: ImageCacheService) {}

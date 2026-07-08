@@ -24,8 +24,17 @@ export class NewsComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.newsService.getNews({ page: 1, limit: 5 }).subscribe((response) => {
             this.newsList = response.data;
+            if (this.newsList.length > 1) {
+                this.intervalId = setInterval(() => this.nextSlide(), 10000);
+            }
         });
-        this.intervalId = setInterval(() => this.nextSlide(), 10000);
+    }
+
+    get progressWidth(): string {
+        if (this.newsList.length === 0) {
+            return '0%';
+        }
+        return `${((this.currentIndex + 1) / this.newsList.length) * 100}%`;
     }
 
     ngOnDestroy(): void {

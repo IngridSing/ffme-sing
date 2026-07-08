@@ -1,5 +1,6 @@
 /**
- * Script de migration : copie les images depuis SFTP vers le stockage local.
+ * Migration one-shot : copie les images depuis un ancien serveur SFTP vers uploads/.
+ * Non utilisé au runtime — l'application écrit directement dans UPLOADS_DIR.
  *
  * Usage (depuis server/) :
  *   FTP_HOST=... FTP_USER=... FTP_PASSWORD=... UPLOADS_DIR=./uploads pnpm ts-node app/scripts/migrate-sftp-to-local.ts

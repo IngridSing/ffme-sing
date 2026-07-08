@@ -1,7 +1,7 @@
 // src/app/controllers/gallery.controller.ts
 import { connectionLimiter } from '@app/middlewares/connectionLimiter.middleware';
 import { imageRateLimiter } from '@app/middlewares/imageRateLimiter.middleware';
-import { GalleryDatabaseFtpService } from '@app/services/database/gallery/gallery.database.ftp.service';
+import { GalleryStorageService } from '@app/services/database/gallery/gallery.storage.service';
 import { streamImageResponse } from '@app/utils/image-route.util';
 import { Request, Response, Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -11,7 +11,7 @@ import { Service } from 'typedi';
 export class GalleryController {
     router: Router;
 
-    constructor(private readonly galleryDbService: GalleryDatabaseFtpService) {
+    constructor(private readonly galleryDbService: GalleryStorageService) {
         this.router = Router();
         this.configureRoutes();
     }
