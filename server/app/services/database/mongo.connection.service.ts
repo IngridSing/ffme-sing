@@ -3,7 +3,6 @@ import { Service } from 'typedi';
 
 @Service()
 export class MongoConnectionService {
-    //private uri: string = 'mongodb+srv://stagiaredevjrsing:gKBA7Pz8vZRcemx7@cluster0.p2dk3j4.mongodb.net/';
     private uri = process.env.MONGO_URI;
 
     constructor() {
