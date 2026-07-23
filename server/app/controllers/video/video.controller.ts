@@ -1,3 +1,5 @@
+import { connectionLimiter } from '@app/middlewares/connectionLimiter.middleware';
+import { imageRateLimiter } from '@app/middlewares/imageRateLimiter.middleware';
 import { VideoDatabaseService } from '@app/services/database/video/video.database.service';
 import { Request, Response, Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -39,6 +41,38 @@ export class VideoController {
             } catch (err) {
                 console.error('Erreur chargement vidéos:', err);
                 return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Erreur serveur' });
+            }
+        });
+
+        /**
+         * @swagger
+         * /api/video/thumbnail/{id}:
+         *   get:
+         *     summary: Récupérer la miniature d'une vidéo (mise en cache localement)
+         *     description: Proxifie et met en cache la miniature externe (YouTube/Vimeo) pour que le navigateur du visiteur n'ait pas à la joindre directement.
+         *     tags: [Video]
+         *     parameters:
+         *       - in: path
+         *         name: id
+         *         required: true
+         *         schema:
+         *           type: string
+         *     responses:
+         *       200:
+         *         description: Image de la miniature
+         *       404:
+         *         description: Miniature introuvable
+         */
+        this.router.get('/thumbnail/:id', imageRateLimiter, connectionLimiter, async (req: Request, res: Response) => {
+            try {
+                const { stream, mime } = await this.videoDbService.getCachedThumbnail(req.params.id as string);
+                res.setHeader('Content-Type', mime);
+                res.setHeader('Content-Disposition', 'inline');
+                res.setHeader('Cache-Control', 'public, max-age=86400');
+                stream.pipe(res);
+            } catch (err) {
+                console.error('Erreur miniature vidéo:', err);
+                res.status(StatusCodes.NOT_FOUND).json({ message: 'Miniature introuvable' });
             }
         });
 

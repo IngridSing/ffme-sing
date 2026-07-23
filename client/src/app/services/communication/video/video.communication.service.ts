@@ -20,4 +20,8 @@ export class VideoControllerService {
     getVideoById(id: string): Observable<Video> {
         return this.http.get<Video>(`${this.baseUrl}${id}`);
     }
+
+    getThumbnailUrl(id: string): string {
+        return `${this.baseUrl}thumbnail/${id}`;
+    }
 }

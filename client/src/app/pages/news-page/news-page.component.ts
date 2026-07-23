@@ -83,7 +83,7 @@ export class NewsPageComponent extends BaseDestroyableComponent implements OnIni
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (data) => {
-                    this.videosList = data.slice(0, 6);
+                    this.videosList = data;
                     this.cdr.detectChanges();
                 },
                 error: () => {
@@ -98,6 +98,10 @@ export class NewsPageComponent extends BaseDestroyableComponent implements OnIni
         this.expandedNews.clear();
         this.loadNews();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    getThumbnailUrl(video: Video): string {
+        return video.thumbnailUrl ? this.videoService.getThumbnailUrl(video._id) : '';
     }
 
     openVideoModal(video: Video): void {

@@ -58,6 +58,10 @@ export class VideosComponent implements OnInit, OnDestroy {
         this.currentIndex = index;
     }
 
+    getThumbnailUrl(video: Video): string {
+        return video.thumbnailUrl ? this.videoService.getThumbnailUrl(video._id) : '';
+    }
+
     formatDate(date: string): string {
         return new Date(date).toLocaleDateString('fr-FR', {
             day: '2-digit',

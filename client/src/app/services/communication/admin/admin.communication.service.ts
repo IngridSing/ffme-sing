@@ -187,6 +187,10 @@ export class AdminCommunicationService {
         });
     }
 
+    getVideoThumbnailUrl(id: string): string {
+        return `${environment.serverUrl}${ApiEndpoints.VIDEO}thumbnail/${id}`;
+    }
+
     postVideo(data: { title: string; description: string; videoUrl: string; date: string }): Observable<Video> {
         return this.http.post<Video>(`${this.baseUrl}video`, data, {
             headers: this.getAuthHeaders(),

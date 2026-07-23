@@ -1,6 +1,9 @@
-import { VideoModel } from '@app/models/video.model';
+import { ImageCacheService } from '@app/services/cache/image-cache.service';
 import { CreateVideoDto, UpdateVideoDto, Video, VideoPlatform } from '@common/interfaces/video';
+import axios from 'axios';
+import { Readable } from 'stream';
 import { Service } from 'typedi';
+import { VideoModel } from '@app/models/video.model';
 
 interface VideoInfo {
     embedUrl: string;
@@ -10,6 +13,38 @@ interface VideoInfo {
 
 @Service()
 export class VideoDatabaseService {
+    constructor(private readonly imageCache: ImageCacheService) {}
+
+    /**
+     * Sert la miniature depuis le cache local, ou la telecharge et la met en cache au premier appel.
+     * Evite que le navigateur du visiteur doive joindre directement img.youtube.com/vumbnail.com
+     * (bloque par certains pare-feux/FAI).
+     */
+    async getCachedThumbnail(id: string): Promise<{ stream: Readable; mime: string }> {
+        const video = await VideoModel.findById(id).lean();
+        if (!video || !video.thumbnailUrl) {
+            throw new Error('Miniature introuvable');
+        }
+
+        const cachePath = `videoThumbnails/${id}.jpg`;
+
+        try {
+            return await this.imageCache.getImage(cachePath);
+        } catch {
+            const buffer = await this.downloadThumbnail(video.thumbnailUrl);
+            await this.imageCache.saveImage(cachePath, buffer);
+            return this.imageCache.getImage(cachePath);
+        }
+    }
+
+    private async downloadThumbnail(url: string): Promise<Buffer> {
+        const response = await axios.get<ArrayBuffer>(url, {
+            responseType: 'arraybuffer',
+            timeout: 8000,
+        });
+        return Buffer.from(response.data);
+    }
+
     async getAll(includeInactive = false): Promise<Video[]> {
         const filter = includeInactive ? {} : { isActive: true };
         return VideoModel.find(filter).sort({ date: -1 }).lean();

@@ -128,7 +128,7 @@
                     [class.video-card--inactive]="!video.isActive"
                 >
                     <div class="video-card__thumbnail" (click)="editVideo(video)">
-                        <img [src]="video.thumbnailUrl" [alt]="video.title" loading="lazy" />
+                        <img [src]="getVideoThumbnailUrl(video)" [alt]="video.title" loading="lazy" />
                         <div class="video-card__play">
                             <i class="fas fa-play"></i>
                         </div>

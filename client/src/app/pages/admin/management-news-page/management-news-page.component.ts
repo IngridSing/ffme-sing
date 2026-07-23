@@ -59,6 +59,10 @@ export class ManagementNewsPageComponent extends BaseDestroyableComponent implem
         return this.videosList.filter(v => v.isActive).length;
     }
 
+    getVideoThumbnailUrl(video: Video): string {
+        return video.thumbnailUrl ? this.adminCommService.getVideoThumbnailUrl(video._id) : '';
+    }
+
     // === NEWS METHODS ===
     loadNews(): void {
         this.isLoading = true;

@@ -10,7 +10,7 @@
                 <div class="video-slide" *ngFor="let video of videosList; let i = index">
                     <div class="video-slide__thumbnail" (click)="openVideo(video)">
                         <img
-                            [src]="video.thumbnailUrl"
+                            [src]="getThumbnailUrl(video)"
                             [alt]="video.title"
                             loading="lazy"
                             (error)="onThumbnailError($event, video)"

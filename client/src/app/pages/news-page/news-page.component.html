@@ -101,7 +101,7 @@
     <div class="videos-grid">
         <div class="video-item" *ngFor="let video of videosList" (click)="openVideoModal(video)">
             <div class="video-item__thumbnail">
-                <img [src]="video.thumbnailUrl" [alt]="video.title" loading="lazy" />
+                <img [src]="getThumbnailUrl(video)" [alt]="video.title" loading="lazy" />
                 <div class="video-item__play">
                     <i class="fas fa-play"></i>
                 </div>
