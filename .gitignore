@@ -16,6 +16,5 @@ coverage/
 
 #Claude
 /.claude-logs/
-CLAUDE.md 
-*.md
+CLAUDE.md
 .claude
