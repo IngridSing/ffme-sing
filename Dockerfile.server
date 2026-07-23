@@ -1,3 +1,7 @@
+# ========================================
+# DOCKERFILE SERVER - PRODUCTION
+# ========================================
+
 # Build stage
 FROM node:20-alpine AS builder
 
@@ -18,13 +22,16 @@ WORKDIR /app/server
 RUN pnpm run build
 
 # Dependencies stage
-FROM node:20-alpine AS deps
+# Must match the glibc runtime of the production stage (distroless/nodejs20-debian12)
+# so native modules (sharp, bcrypt) are built against the right libc, not Alpine's musl.
+FROM node:20-bookworm-slim AS deps
 
 WORKDIR /app
 RUN npm install -g pnpm
 
 COPY server/package.json server/pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --frozen-lockfile --prod \
+    && pnpm rebuild bcrypt sharp
 RUN mkdir -p uploads assets
 
 # Production stage (distroless)
@@ -42,5 +49,9 @@ EXPOSE 3000
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV UPLOADS_DIR=/app/uploads
+
+# distroless n'a ni shell ni wget/curl : le check passe par node -e directement.
+HEALTHCHECK --interval=15s --timeout=5s --start-period=40s --retries=5 \
+    CMD ["node", "-e", "require('http').get({host:'127.0.0.1',port:process.env.PORT||3000,path:'/api/health',timeout:3000},r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"]
 
 CMD ["out/server/app/index.js"]

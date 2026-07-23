@@ -1,4 +1,6 @@
-# Development Dockerfile with hot reload support
+# ========================================
+# DOCKERFILE SERVER - DOCKER DEV (hot reload)
+# ========================================
 FROM node:20-alpine
 
 WORKDIR /app
@@ -27,5 +29,8 @@ ENV NODE_ENV=development
 ENV PORT=3000
 ENV DOCKER=true
 ENV UPLOADS_DIR=/app/uploads
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=40s --retries=5 \
+    CMD wget -qO- http://localhost:3000/api/health || exit 1
 
 CMD ["pnpm", "start"]

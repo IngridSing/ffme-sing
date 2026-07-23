@@ -52,8 +52,11 @@ services:
       PORT: 3000
       DOCKER: "true"
       JWT_SECRET: ${JWT_SECRET}
-      MONGO_URI: ${MONGO_URI}
-      DB_URL: ${DB_URL}
+      # Codee en dur vers le mongodb du stack de dev ci-dessus : ne doit JAMAIS
+      # pouvoir retomber sur MONGO_URI/DB_URL du .env racine (celui-ci contient
+      # les identifiants de PRODUCTION et est partage avec docker-compose.yml).
+      MONGO_URI: mongodb://${MONGO_ROOT_USER}:${MONGO_ROOT_PASSWORD}@mongodb:27017/FFME?authSource=admin
+      DB_URL: mongodb://${MONGO_ROOT_USER}:${MONGO_ROOT_PASSWORD}@mongodb:27017/FFME?authSource=admin
       MAIL_API_KEY: ${MAIL_API_KEY:-}
       SMTP_HOST: ${SMTP_HOST:-}
       SMTP_PORT: ${SMTP_PORT:-587}
