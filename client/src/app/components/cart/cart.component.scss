@@ -29,6 +29,7 @@
         border: 1px solid #ccc;
         padding: 15px;
         width: 300px;
+        max-width: calc(100vw - 40px);
         border-radius: 8px;
         box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
 

@@ -12,7 +12,8 @@
     margin-bottom: 30px;
 
     .product-left {
-        flex: 0 0 320px;
+        flex: 0 1 320px;
+        min-width: 0;
 
         img {
             width: 100%;
