@@ -82,18 +82,22 @@ export class AuthService {
         return count > 0;
     }
 
+    /**
+     * Cree le tout premier compte superadmin si aucun n'existe encore, a partir des
+     * identifiants fournis par variables d'environnement (jamais de mot de passe en dur ici).
+     */
     async ensureDefaultAdmins(): Promise<void> {
-        const defaultAdmins = [
-            { email: 'admin@meyefoundation.org', password: 'admin123', role: 'superadmin' as const },
-            { email: 'morel.mintsa@sing.ga', password: '1234567890', role: 'admin' as const },
-        ];
+        const email = process.env.DEFAULT_ADMIN_EMAIL;
+        const password = process.env.DEFAULT_ADMIN_PASSWORD;
 
-        for (const adminData of defaultAdmins) {
-            const exists = await this.adminExists(adminData.email);
-            if (!exists) {
-                await this.createAdmin(adminData.email, adminData.password, adminData.role);
-                console.log(`Admin créé: ${adminData.email}`);
-            }
+        if (!email || !password) {
+            return;
+        }
+
+        const exists = await this.adminExists(email);
+        if (!exists) {
+            await this.createAdmin(email, password, 'superadmin');
+            console.log(`Admin créé: ${email}`);
         }
     }
 }

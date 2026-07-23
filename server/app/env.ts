@@ -24,7 +24,10 @@ if (!IS_PRODUCTION) {
     console.log('🚀 [Server] Mode PRODUCTION détecté');
 }
 
-export const JWT_SECRET = process.env.JWT_SECRET || 'fallback';
+if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET manquant : definissez cette variable d\'environnement avant de demarrer le serveur.');
+}
+export const JWT_SECRET = process.env.JWT_SECRET;
 
 export const DB_URL = process.env.DB_URL || '';
 export const MAIL_API_KEY = process.env.MAIL_API_KEY || '';
@@ -32,10 +35,10 @@ export const MAIL_API_KEY = process.env.MAIL_API_KEY || '';
 export const DATABASE_URL = '';
 
 export const singPayConfig = {
-    clientId: 'e677f1a8-4033-4595-9193-6c2474d64046',
-    clientSecret: '43ea50a5feca0340d241b9b60fbf9365137d5e188a41a91295b37171b4e38b63',
-    walletId: '68231f26ac445b3ed889a6fa',
-    disbursementId: '682324f8ac445b3cd189a9f2',
+    clientId: process.env.SINGPAY_CLIENT_ID || '',
+    clientSecret: process.env.SINGPAY_CLIENT_SECRET || '',
+    walletId: process.env.SINGPAY_WALLET_ID || '',
+    disbursementId: process.env.SINGPAY_DISBURSEMENT_ID || '',
     // URLs de l'API Singpay (centralisées pour faciliter les modifications)
     apiUrl: process.env.SINGPAY_API_URL || 'https://gateway.singpay.ga/v1/ext',
     transactionsUrl: process.env.SINGPAY_TRANSACTIONS_URL || 'https://gateway.singpay.ga/v1/transaction/api',

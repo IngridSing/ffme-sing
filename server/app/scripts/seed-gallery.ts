@@ -3,9 +3,14 @@ import mongoose from 'mongoose';
 import * as path from 'path';
 import { ProductModel, ProductOrderModel } from '../models/products.model';
 
-const MONGODB_URI = 'mongodb://admin:iWp3p778NdGyd3tMQ6Z6k3TkgK5hM24M3@162.19.253.183:27018/FFME?authSource=admin&directConnection=true'; // à adapter
+const MONGODB_URI = process.env.MONGO_URI || process.env.DB_URL;
 
 async function seedDatabase() {
+    if (!MONGODB_URI) {
+        console.error('❌ MONGO_URI (ou DB_URL) manquant : definissez cette variable avant de lancer le script.');
+        process.exit(1);
+    }
+
     try {
         await mongoose.connect(MONGODB_URI);
         console.log('✅ Connecté à MongoDB');
