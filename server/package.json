@@ -50,7 +50,7 @@
         "@common": "out/common"
     },
     "dependencies": {
-        "axios": "^1.13.2",
+        "axios": "^1.18.1",
         "bcrypt": "^6.0.0",
         "cookie-parser": "1.4.7",
         "cors": "2.8.6",
